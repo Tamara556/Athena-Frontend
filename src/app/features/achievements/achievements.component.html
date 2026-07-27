@@ -1,0 +1,174 @@
+<div class="ach-root">
+<div class="noise" aria-hidden="true"></div>
+<div class="page-mesh" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+
+<app-sidebar>
+  <main class="main">
+    <header class="topbar" [class.scrolled]="scrolled()">
+      <button class="hamburger" type="button" aria-label="Open menu" (click)="openDrawer()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+      <div class="crumb"><span class="root">Athena</span><span class="sep">›</span><b>{{ 'ach.title' | t }}</b></div>
+      <div class="topbar-spacer"></div>
+      <label class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input type="text" [placeholder]="'ach.search' | t" aria-label="Search" [value]="store.search()" (input)="store.search.set(topq.value)" #topq><kbd>⌘K</kbd></label>
+      <app-lang-select></app-lang-select><app-theme-toggle></app-theme-toggle><button class="icon-btn" type="button" aria-label="Notifications"><span class="dot"></span><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg></button>
+    </header>
+
+    <div class="ach">
+
+      <!-- HERO -->
+      <section class="ach-hero reveal">
+        <svg class="mark-wrap" viewBox="0 0 120 120" aria-hidden="true"><use href="#athenaMark"/></svg>
+        <div>
+          <h1><span class="grad-text">{{ 'ach.title' | t }}</span></h1>
+          <p class="sub">{{ 'ach.hero.sub' | t }}</p>
+          <p class="supp">{{ 'ach.hero.supp' | t }}</p>
+          <span class="ach-reflect">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.4 2.3 7.2-6.3-4.6L5.7 21 8 14 2 9.6h7.6z"/></svg>
+            <b>{{ store.stats().unlocked }} {{ 'ach.moments' | t }}</b> @if (heroSince()) { {{ 'ach.gatheredSince' | t }} {{ heroSince() }} } @else { {{ 'ach.gatheredSoFar' | t }} }
+          </span>
+        </div>
+      </section>
+
+      @if (emptyState()) {
+        <!-- EMPTY STATE -->
+        <section class="empty show" aria-live="polite">
+          <div class="empty-emblem" aria-hidden="true">
+            <svg viewBox="0 0 120 120"><use href="#athenaMark"/></svg>
+          </div>
+          <h2>{{ 'ach.empty.title' | t }}</h2>
+          <p>{{ 'ach.empty.body1' | t }}</p>
+          <p>{{ 'ach.empty.body2' | t }}</p>
+          <div class="seed"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1 3-1 4-1 6 0 1 1 2 2 2 2 0 2-2 2-2 2 2 3 4 3 7a6 6 0 0 1-12 0c0-4 3-6 4-9 .8 2 2 2.5 2 2-1-2 0-4 0-6z"/></svg> {{ 'ach.empty.watching' | t }}</div>
+          @if (showEmptyPreview()) {
+            <div class="empty-foot"><button class="btn btn-glass btn-sm" type="button" (click)="showEmptyPreview.set(false)">{{ 'ach.empty.back' | t }}</button></div>
+          }
+        </section>
+      } @else if (!loaded()) {
+        <!-- SKELETON -->
+        <div class="sk-grid" aria-hidden="true">
+          <div class="sk-card"><div class="sk sk-circle"></div><div class="sk sk-line" style="width:60%;margin-bottom:9px"></div><div class="sk sk-line" style="width:85%;margin-bottom:7px"></div><div class="sk sk-line" style="width:45%"></div></div>
+          <div class="sk-card"><div class="sk sk-circle"></div><div class="sk sk-line" style="width:55%;margin-bottom:9px"></div><div class="sk sk-line" style="width:80%;margin-bottom:7px"></div><div class="sk sk-line" style="width:50%"></div></div>
+          <div class="sk-card"><div class="sk sk-circle"></div><div class="sk sk-line" style="width:62%;margin-bottom:9px"></div><div class="sk sk-line" style="width:78%;margin-bottom:7px"></div><div class="sk sk-line" style="width:42%"></div></div>
+        </div>
+      } @else {
+        <!-- STATISTICS -->
+        <section class="ach-stats reveal">
+          <div class="stat">
+            <div class="stat-ring" [style.--p]="store.stats().completionPercent"><b><app-count-up [value]="store.stats().completionPercent"></app-count-up><span class="unit">%</span></b></div>
+            <span class="stat-lbl">{{ 'ach.stat.completion' | t }}</span>
+          </div>
+          <div class="stat"><span class="stat-ic" style="background:linear-gradient(135deg,#8B5CF6,#A855F7)">🎖️</span><b class="stat-val"><app-count-up [value]="store.stats().total"></app-count-up></b><span class="stat-lbl">{{ 'ach.stat.total' | t }}</span></div>
+          <div class="stat"><span class="stat-ic" style="background:linear-gradient(135deg,#34D399,#22D3EE)">✅</span><b class="stat-val"><app-count-up [value]="store.stats().unlocked"></app-count-up></b><span class="stat-lbl">{{ 'ach.stat.unlocked' | t }}</span></div>
+          <div class="stat"><span class="stat-ic" style="background:linear-gradient(135deg,#94A3B8,#64748B)">🔒</span><b class="stat-val"><app-count-up [value]="store.stats().locked"></app-count-up></b><span class="stat-lbl">{{ 'ach.stat.locked' | t }}</span></div>
+          <div class="stat"><span class="stat-ic" style="background:linear-gradient(135deg,#F472B6,#A855F7)">✨</span><b class="stat-val"><app-count-up [value]="store.stats().aiGenerated"></app-count-up></b><span class="stat-lbl">{{ 'ach.stat.ai' | t }}</span></div>
+        </section>
+
+        <!-- RECENTLY EARNED -->
+        @if (store.recent().length) {
+          <div class="month reveal"><h2>{{ 'ach.recent.title' | t }}</h2><span class="ct">{{ store.recent().length }} {{ 'ach.fresh' | t }}</span><span class="rule"></span></div>
+          <div class="grid">
+            @for (b of store.recent(); track b.id) {
+              <article class="badge-card" [style]="badgeStyle(b)" [attr.data-anim]="b.animation" tabindex="0" role="button" [attr.aria-label]="b.title" (click)="store.open(b)" (keydown.enter)="store.open(b)">
+                <div class="bc-tags"><span class="rarity-tag">{{ rarity(b.rarity) }}</span>@if (b.generatedByAI) {<span class="ai-tag">✨ AI</span>}</div>
+                <div class="medallion" aria-hidden="true">{{ b.icon }}</div>
+                <h3>{{ b.title }}</h3>
+                <p>{{ b.description }}</p>
+                <span class="earned"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> {{ 'ach.earned' | t }} · <time [attr.datetime]="b.earnedAt">{{ formatDate(b.earnedAt!) }}</time></span>
+              </article>
+            }
+          </div>
+        }
+
+        <!-- TOOLBAR -->
+        <section class="ach-toolbar reveal">
+          <label class="tb-search">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="text" [placeholder]="'ach.searchBadges' | t" aria-label="Search badges" [value]="store.search()" (input)="store.search.set(q.value)" #q>
+          </label>
+
+          <div class="seg" role="group" aria-label="Status">
+            @for (s of statusOptions; track s.value) {
+              <button type="button" [class.on]="store.status() === s.value" (click)="store.setStatus(s.value)">{{ ('ach.status.' + s.value) | t }}</button>
+            }
+          </div>
+
+          <button class="fchip" type="button" [class.on]="store.aiOnly()" (click)="store.toggleAiOnly()">✨ {{ 'ach.aiGenerated' | t }}</button>
+
+          <div class="tb-sort">
+            <span class="tb-lbl">{{ 'ach.sortLabel' | t }}</span>
+            <div class="seg">
+              @for (s of sortOptions; track s.value) {
+                <button type="button" [class.on]="store.sort() === s.value" (click)="store.setSort(s.value)">{{ ('ach.sort.' + s.value) | t }}</button>
+              }
+            </div>
+          </div>
+        </section>
+
+        <div class="chip-row reveal">
+          @for (c of store.categories(); track c) {
+            <button class="fchip" type="button" [class.on]="store.category() === c" (click)="store.toggleCategory(c)">{{ c }}</button>
+          }
+          <span class="chip-sep"></span>
+          @for (r of store.rarities(); track r) {
+            <button class="fchip rarity" type="button" [attr.data-rarity]="r.toLowerCase()" [class.on]="store.rarity() === r" (click)="store.toggleRarity(r)">{{ rarity(r) }}</button>
+          }
+          @if (store.hasActiveFilters()) {
+            <button class="fchip clear" type="button" (click)="store.clearFilters()">{{ 'ach.clear' | t }}</button>
+          }
+        </div>
+
+        <!-- BADGE GRID -->
+        <div class="grid ach-grid">
+          @for (b of store.visible(); track b.id) {
+            <article class="badge-card" [class.locked]="!b.earned" [style]="badgeStyle(b)" [attr.data-anim]="b.animation" tabindex="0" role="button" [attr.aria-label]="b.title" (click)="store.open(b)" (keydown.enter)="store.open(b)">
+              <div class="bc-tags"><span class="rarity-tag">{{ rarity(b.rarity) }}</span>@if (b.generatedByAI) {<span class="ai-tag">✨ AI</span>}</div>
+              <div class="medallion" aria-hidden="true">{{ b.icon }}@if (!b.earned) {<span class="lock" aria-hidden="true">🔒</span>}</div>
+              <h3>{{ b.title }}</h3>
+              <p>{{ b.description }}</p>
+              @if (b.earned) {
+                <span class="earned"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> {{ 'ach.earned' | t }} · <time [attr.datetime]="b.earnedAt">{{ formatDate(b.earnedAt!) }}</time></span>
+              } @else {
+                <div class="bc-prog">
+                  <div class="bc-track"><i [style.width.%]="percent(b)"></i></div>
+                  <span>{{ b.progress }}/{{ b.maxProgress }}</span>
+                </div>
+              }
+            </article>
+          } @empty {
+            <div class="grid-empty"><p>{{ 'ach.noMatch' | t }}</p><button class="btn btn-glass btn-sm" type="button" (click)="store.clearFilters()">{{ 'ach.clear' | t }}</button></div>
+          }
+        </div>
+
+        <div class="preview-toggle">
+          <button class="btn-ghost" type="button" (click)="showEmptyPreview.set(true)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg> {{ 'streaks.previewEmpty' | t }}</button>
+        </div>
+      }
+
+    </div>
+  </main>
+</app-sidebar>
+
+<!-- BADGE DETAILS DIALOG -->
+<div class="bd-scrim" [class.show]="store.selected()" role="dialog" aria-modal="true" (click)="$event.target === $event.currentTarget && store.close()">
+  @if (store.selected(); as b) {
+    <div class="bd-modal" [style]="badgeStyle(b)">
+      <button class="bd-close" type="button" aria-label="Close" (click)="store.close()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      <div class="medallion bd-medallion" [class.locked]="!b.earned" aria-hidden="true">{{ b.icon }}@if (!b.earned) {<span class="lock">🔒</span>}</div>
+      <div class="bd-tags">
+        <span class="rarity-tag" [attr.data-rarity]="b.rarity.toLowerCase()">{{ rarity(b.rarity) }}</span>
+        <span class="cat-tag">{{ b.category }}</span>
+        @if (b.generatedByAI) { <span class="ai-tag">✨ {{ 'ach.aiGenerated' | t }}</span> }
+      </div>
+      <h3>{{ b.title }}</h3>
+      <p>{{ b.description }}</p>
+      @if (b.earned) {
+        <div class="bd-earned"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> {{ 'ach.earnedOn' | t }} {{ formatDate(b.earnedAt!) }}</div>
+      } @else {
+        <div class="bd-prog">
+          <div class="bc-track"><i [style.width.%]="percent(b)"></i></div>
+          <span>{{ b.progress }} / {{ b.maxProgress }} · {{ percent(b) }}%</span>
+        </div>
+      }
+    </div>
+  }
+</div>
+</div>

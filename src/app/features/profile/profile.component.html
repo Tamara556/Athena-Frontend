@@ -1,0 +1,193 @@
+<div class="pf-root">
+<div class="noise" aria-hidden="true"></div>
+<div class="page-mesh" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+
+<app-sidebar>
+  <main class="main">
+    <header class="topbar" [class.scrolled]="scrolled()">
+      <button class="hamburger" type="button" aria-label="Open menu" (click)="openDrawer()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+      <div class="crumb"><span class="root">Athena</span><span class="sep">›</span><b>{{ 'profile.title' | t }}</b></div>
+      <div class="topbar-spacer"></div>
+      <label class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input type="text" [placeholder]="'profile.search' | t" aria-label="Search"><kbd>⌘K</kbd></label>
+      <app-lang-select></app-lang-select><app-theme-toggle></app-theme-toggle><button class="icon-btn" type="button" aria-label="Notifications"><span class="dot"></span><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg></button>
+    </header>
+
+    <input #avatarInput type="file" accept="image/*" hidden (change)="onAvatarSelected($event)">
+
+    <div class="pf">
+
+      <!-- PROFILE HEADER -->
+      <section class="phead reveal" aria-labelledby="pf-name">
+        <div class="pavatar" role="img" [attr.aria-label]="(identity()?.firstName ?? 'Your') + ' avatar'" (click)="pickAvatar()">@if (avatarUrl(); as url) {<img [src]="url" alt="">} @else {{{ initials() }}}
+          <span class="cam" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></span>
+        </div>
+        <div class="phead-main">
+          <h1 id="pf-name">{{ identity()?.firstName }} <span class="grad-text">{{ identity()?.lastName }}</span></h1>
+          @if (identity()?.title) { <div class="goal">{{ identity()?.title }}</div> }
+          <div class="phead-meta">
+            <span class="ai-badge"><span class="spark">✦</span> {{ 'profile.aiJourney' | t }}</span>
+            @if (joinedLabel()) { <span class="pchip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> {{ 'profile.joined' | t }} · {{ joinedLabel() }}</span> }
+          </div>
+        </div>
+      </section>
+
+      @if (showEmpty()) {
+        <!-- EMPTY STATE -->
+        <section class="empty show" aria-live="polite">
+          <div class="empty-emblem" aria-hidden="true"><svg viewBox="0 0 120 120"><use href="#athenaMark"/></svg></div>
+          <h2>{{ 'profile.empty.title' | t }}</h2>
+          <p>{{ 'profile.empty.body' | t }}</p>
+          <div class="empty-foot"><button class="btn btn-glass btn-sm" type="button" (click)="showEmpty.set(false)">{{ 'profile.empty.back' | t }}</button></div>
+        </section>
+      } @else {
+
+      <!-- WHY YOU STARTED -->
+      @if (narrative()?.whyStarted) {
+      <section class="section reveal">
+        <div class="section-head"><span class="eyebrow">{{ 'profile.why.eyebrow' | t }}</span></div>
+        <div class="why">
+          <span class="quote" aria-hidden="true">“</span>
+          <div class="why-body">
+            <p>{{ narrative()?.whyStarted }}</p>
+            <div class="sig"><svg viewBox="0 0 120 120" aria-hidden="true"><use href="#athenaMark"/></svg> {{ 'profile.why.sig' | t }}, {{ whyLabel() }}</div>
+          </div>
+        </div>
+      </section>
+      }
+
+      <!-- DIRECTION + PREFERENCES -->
+      <section class="section reveal">
+        <div class="duo">
+          @if (direction(); as d) {
+          <div class="card">
+            <div class="card-title"><span class="ct" style="background:linear-gradient(135deg,#8B5CF6,#A855F7)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg></span> {{ 'profile.dir.title' | t }}</div>
+            <div class="dline"><span class="di" style="background:linear-gradient(135deg,#8B5CF6,#A855F7)">🎯</span><div class="dt"><small>{{ 'profile.dir.primary' | t }}</small><b>{{ d.primaryGoal }}</b></div></div>
+            <div class="dline"><span class="di" style="background:linear-gradient(135deg,#06B6D4,#22D3EE)">⚡</span><div class="dt"><small>{{ 'profile.dir.focus' | t }}</small><b>{{ d.currentFocus }}</b></div></div>
+            <div class="dline"><span class="di" style="background:linear-gradient(135deg,#F472B6,#A855F7)">🧭</span><div class="dt"><small>{{ 'profile.dir.milestone' | t }}</small><b>{{ d.nextMilestone }}</b></div></div>
+          </div>
+          }
+          <div class="card">
+            <div class="card-title"><span class="ct" style="background:linear-gradient(135deg,#34D399,#22D3EE)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></span> {{ 'profile.pref.title' | t }}</div>
+            <div class="prefs-list">
+              @for (bullet of styleBullets(); track bullet) {
+                <div class="pref"><span class="pk">✓</span> {{ bulletText(bullet) }}</div>
+              }
+            </div>
+            <div class="pref-meta">
+              @if (preferences(); as p) {
+                <div class="pmeta"><small>{{ 'profile.pref.availability' | t }}</small><b>{{ availabilityText(p.availability) }}</b></div>
+                <div class="pmeta"><small>{{ 'profile.pref.difficulty' | t }}</small><b>{{ difficultyText(p.difficulty) }}</b></div>
+              }
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ATHENA'S PERSPECTIVE -->
+      @if (insights().length) {
+      <section class="section reveal">
+        <div class="persp">
+          <div class="persp-head"><svg viewBox="0 0 120 120" aria-hidden="true"><use href="#athenaMark"/></svg><div><div class="pt">{{ 'profile.persp.eyebrow' | t }}</div><h3>{{ 'profile.persp.title' | t }}</h3></div></div>
+          <div class="persp-list">
+            @for (insight of insights(); track insight.text) {
+              @let seg = parts(insight);
+              <div class="pv"><span class="pvi">{{ icon(insight.kind) }}</span><p>{{ seg.before }}<b>{{ seg.bold }}</b>{{ seg.after }}</p></div>
+            }
+          </div>
+        </div>
+      </section>
+      }
+
+      <!-- MEANINGFUL MOMENTS -->
+      @if (milestones().length) {
+      <section class="section reveal">
+        <div class="section-head"><h2>{{ 'profile.moments.title' | t }}</h2></div>
+        <div class="card">
+          <div class="moments">
+            @for (moment of milestones(); track moment.id) {
+              <div class="moment"><span class="mdot" aria-hidden="true"></span><div class="mtext"><b>{{ moment.title }}</b><span>{{ monthYear(moment.achievedAt) }}</span></div></div>
+            }
+          </div>
+        </div>
+      </section>
+      }
+
+      <!-- PROFILE ACTIONS -->
+      <section class="section reveal">
+        <div class="section-head"><h2>{{ 'profile.actions.title' | t }}</h2></div>
+        <div class="actions">
+          <button class="action" type="button" (click)="openDialog('profile')">
+            <span class="ai" style="background:linear-gradient(135deg,#8B5CF6,#A855F7)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span>
+            <span class="abody"><b>{{ 'profile.act.editProfile' | t }}</b><span>{{ 'profile.act.editProfileDesc' | t }}</span></span>
+            <span class="arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </button>
+          <button class="action" type="button" (click)="openDialog('goal')">
+            <span class="ai" style="background:linear-gradient(135deg,#06B6D4,#22D3EE)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg></span>
+            <span class="abody"><b>{{ 'profile.act.goal' | t }}</b><span>{{ 'profile.act.goalDesc' | t }}</span></span>
+            <span class="arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </button>
+          <button class="action" type="button" (click)="openDialog('availability')">
+            <span class="ai" style="background:linear-gradient(135deg,#FBBF24,#FB923C)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+            <span class="abody"><b>{{ 'profile.act.avail' | t }}</b><span>{{ 'profile.act.availDesc' | t }}</span></span>
+            <span class="arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </button>
+          <button class="action" type="button" (click)="retakeOnboarding()">
+            <span class="ai" style="background:linear-gradient(135deg,#F472B6,#A855F7)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 1 3 6.7L3 16M3 21v-5h5"/></svg></span>
+            <span class="abody"><b>{{ 'profile.act.retake' | t }}</b><span>{{ 'profile.act.retakeDesc' | t }}</span></span>
+            <span class="arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </button>
+        </div>
+      </section>
+
+      <!-- preview empty state -->
+      <div class="preview-toggle">
+        <button class="btn-ghost" type="button" (click)="showEmpty.set(true)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg> {{ 'profile.previewEmpty' | t }}</button>
+      </div>
+
+      }
+
+    </div>
+  </main>
+</app-sidebar>
+
+<!-- profile dialogs -->
+<div class="modal-scrim" [class.show]="dialog()" role="dialog" aria-modal="true" (click)="$event.target === $event.currentTarget && closeDialog()">
+  @if (dialog(); as kind) {
+    <div class="modal form">
+      @switch (kind) {
+        @case ('profile') {
+          <h3>{{ 'profile.act.editProfile' | t }}</h3>
+          <div class="dlg-field"><label>{{ 'settings.dlg.firstName' | t }}</label><input type="text" autocomplete="given-name" [value]="firstName()" (input)="firstName.set(fn.value)" #fn></div>
+          <div class="dlg-field"><label>{{ 'settings.dlg.lastName' | t }}</label><input type="text" autocomplete="family-name" [value]="lastName()" (input)="lastName.set(ln.value)" #ln></div>
+        }
+        @case ('goal') {
+          <h3>{{ 'profile.act.goal' | t }}</h3>
+          <div class="dlg-field"><label>{{ 'profile.dir.primary' | t }}</label><input type="text" [value]="primaryGoal()" (input)="primaryGoal.set(pg.value)" #pg></div>
+          <div class="dlg-field"><label>{{ 'profile.dir.focus' | t }}</label><input type="text" [value]="currentFocus()" (input)="currentFocus.set(cf.value)" #cf></div>
+          <div class="dlg-field"><label>{{ 'profile.dir.milestone' | t }}</label><input type="text" [value]="nextMilestone()" (input)="nextMilestone.set(nm.value)" #nm></div>
+        }
+        @case ('availability') {
+          <h3>{{ 'profile.dlg.availTitle' | t }}</h3>
+          <p class="dlg-sub">{{ 'profile.dlg.availSub' | t }}</p>
+          <div class="dlg-field"><div class="seg" role="group" [attr.aria-label]="'settings.learn.availability' | t">
+            @for (opt of availabilityOptions; track opt.value) {
+              <button class="seg-opt" type="button" [class.active]="availability() === opt.value" (click)="availability.set(opt.value)">{{ ('settings.learn.' + opt.value) | t }}</button>
+            }
+          </div></div>
+        }
+      }
+      @if (formError()) { <p class="dlg-err">{{ formError() }}</p> }
+      <div class="modal-acts">
+        <button class="btn btn-glass btn-sm" type="button" [disabled]="dialogBusy()" (click)="closeDialog()">{{ 'settings.common.cancel' | t }}</button>
+        <button class="btn btn-primary btn-sm" type="button" [disabled]="dialogBusy()" (click)="submit()">{{ dialogBusy() ? ('settings.common.saving' | t) : ('settings.common.save' | t) }}</button>
+      </div>
+    </div>
+  }
+</div>
+
+<!-- toast -->
+<div class="toast" [class.show]="toastShow()" role="status" aria-live="polite">
+  <span class="ti"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span>
+  <div><b>{{ toastTitle() }}</b><span>{{ toastSub() }}</span></div>
+</div>
+</div>

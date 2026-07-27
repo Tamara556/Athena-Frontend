@@ -1,0 +1,40 @@
+<h1>Dashboard</h1>
+@if (!session.isLoggedIn()) {
+  <div class="warn">Please <a routerLink="/login">sign in</a> first.</div>
+} @else {
+
+  <div class="card">
+    <h2>🗺️ Roadmap</h2>
+    @if (roadmap(); as rm) {
+      <div class="row"><span class="tag">{{ rm.goal }}</span><span class="tag">{{ rm.level }}</span></div>
+      @for (phase of rm.phases; track $index) {
+        <div class="card sub-card">
+          <strong>Phase {{ $index + 1 }}: {{ phase.name }}</strong>
+          <span class="tag" style="margin-left:8px">{{ phase.durationWeeks }} weeks</span>
+          <ul class="clean">@for (o of phase.objectives; track o) { <li>{{ o }}</li> }</ul>
+        </div>
+      }
+    } @else {
+      <p class="muted">{{ roadmapMsg() }}</p>
+    }
+  </div>
+
+  <div class="card">
+    <h2>📅 Today's plan</h2>
+    @if (plan(); as pl) {
+      <p class="muted">{{ pl.date }}</p>
+      <div class="grid">
+        @for (item of pl.items; track $index) {
+          <div class="card sub-card grid-card">
+            <span class="tag">{{ item.type }}</span>
+            <div style="margin-top:6px"><strong>{{ item.title }}</strong></div>
+            <div class="muted" style="font-size:.86rem">{{ item.description }}</div>
+            <div class="muted" style="font-size:.78rem; margin-top:6px">⏱ {{ item.estimatedMinutes }} min</div>
+          </div>
+        }
+      </div>
+    } @else {
+      <p class="muted">{{ planMsg() }}</p>
+    }
+  </div>
+}

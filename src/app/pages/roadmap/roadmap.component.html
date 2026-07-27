@@ -1,0 +1,207 @@
+<div class="rm-noise" aria-hidden="true"></div>
+
+<!-- shared SVG defs (Athena mark + kg edge gradient) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="blobBlur"><feGaussianBlur stdDeviation="11"/></filter>
+    <g id="athenaMark">
+      <clipPath id="flowerClip"><circle cx="60" cy="26" r="20"/><circle cx="89.4" cy="43" r="20"/><circle cx="89.4" cy="77" r="20"/><circle cx="60" cy="94" r="20"/><circle cx="30.6" cy="77" r="20"/><circle cx="30.6" cy="43" r="20"/><circle cx="60" cy="60" r="33"/></clipPath>
+      <mask id="starCut"><rect x="0" y="0" width="120" height="120" fill="#fff"/><path d="M60 38 Q63.5 56.5 82 60 Q63.5 63.5 60 82 Q56.5 63.5 38 60 Q56.5 56.5 60 38 Z" fill="#000"/></mask>
+      <g clip-path="url(#flowerClip)" mask="url(#starCut)">
+        <rect x="0" y="0" width="120" height="120" fill="#A855F7"/>
+        <g filter="url(#blobBlur)"><circle cx="60" cy="16" r="30" fill="#8B5CF6"/><circle cx="98" cy="36" r="30" fill="#F472B6"/><circle cx="100" cy="80" r="30" fill="#FB923C"/><circle cx="62" cy="102" r="30" fill="#A3E635"/><circle cx="22" cy="82" r="30" fill="#2DD4BF"/><circle cx="18" cy="38" r="30" fill="#60A5FA"/><circle cx="44" cy="14" r="22" fill="#7C3AED"/></g>
+      </g>
+    </g>
+  </defs>
+</svg>
+
+<app-sidebar #sb>
+  <main class="main">
+    <div class="main-mesh" aria-hidden="true"><div class="rm-blob rm-b1"></div><div class="rm-blob rm-b2"></div><div class="rm-blob rm-b3"></div></div>
+
+    <header class="topbar" [class.scrolled]="scrolled()">
+      <button class="hamburger" aria-label="Open menu" (click)="sb.openDrawer()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      </button>
+      <div class="crumb"><span class="root">Athena</span><span class="sep">›</span><b>{{ 'rm.title' | t }}</b></div>
+      <div class="topbar-spacer"></div>
+      <label class="search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" [placeholder]="'dj.search' | t" aria-label="Search">
+        <kbd>⌘K</kbd>
+      </label>
+      <app-lang-select></app-lang-select><app-theme-toggle></app-theme-toggle><button class="icon-btn" aria-label="Notifications"><span class="dot"></span>
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+      </button>
+    </header>
+
+    <div class="content">
+
+      <section class="greet reveal" [class.in]="revealed()">
+        <h1>{{ 'rm.welcome' | t }} <span class="grad-text">{{ name() }}</span> <span class="wave">👋</span></h1>
+        <p>{{ 'rm.intro1' | t }} <b>{{ goal() }}</b>{{ 'rm.intro2' | t }}</p>
+      </section>
+
+      @if (hasRoadmap()) {
+        <section class="stats" aria-label="Your roadmap at a glance">
+          <article class="stat reveal d1" [class.in]="revealed()">
+            <div class="stat-ico" style="background:linear-gradient(135deg,#8B5CF6,#A855F7)">🗺️</div>
+            <div class="stat-num">{{ totalPhases() }}</div>
+            <div class="stat-lbl">{{ 'rm.stat.phases' | t }}</div>
+            <span class="stat-spark">🗺️</span>
+          </article>
+          <article class="stat reveal d2" [class.in]="revealed()">
+            <div class="stat-ico" style="background:linear-gradient(135deg,#06B6D4,#22D3EE)">📌</div>
+            <div class="stat-num">{{ totalObjectives() }}</div>
+            <div class="stat-lbl">{{ 'rm.stat.milestones' | t }}</div>
+            <span class="stat-spark">📌</span>
+          </article>
+          <article class="stat reveal d3" [class.in]="revealed()">
+            <div class="stat-ico" style="background:linear-gradient(135deg,#34D399,#22D3EE)">⏱</div>
+            <div class="stat-num">{{ totalWeeks() }} <small>{{ 'rm.wks' | t }}</small></div>
+            <div class="stat-lbl">{{ 'rm.stat.estimated' | t }}</div>
+            <span class="stat-spark">⏱</span>
+          </article>
+          <article class="stat reveal d4" [class.in]="revealed()">
+            <div class="stat-ico" style="background:linear-gradient(135deg,#FDE68A,#F472B6)">🎯</div>
+            <div class="stat-num" style="font-size:21px;text-transform:capitalize">{{ level() || '—' }}</div>
+            <div class="stat-lbl">{{ 'rm.stat.startLevel' | t }}</div>
+            <span class="stat-spark">🎯</span>
+          </article>
+        </section>
+
+        <section class="insight reveal" [class.in]="revealed()" aria-live="polite">
+          <svg class="insight-mark" viewBox="0 0 120 120" aria-hidden="true"><use href="#athenaMark"/></svg>
+          <div class="insight-body">
+            <div class="tag">{{ 'rm.insight.tag' | t }}</div>
+            <p>{{ 'rm.insight.b1' | t }} <b>{{ goal() }}</b> {{ 'rm.insight.b2' | t: { n: totalPhases() } }}</p>
+          </div>
+        </section>
+
+        <div class="journey-head reveal" [class.in]="revealed()">
+          <div>
+            <span class="eyebrow">{{ 'rm.eyebrow' | t }}</span>
+            <h2>{{ 'rm.roadTo' | t }} <span class="grad-text">{{ goal() }}</span></h2>
+          </div>
+          <div class="legend" aria-hidden="true">
+            <span class="lg current"><i></i>{{ 'rm.legend.current' | t }}</span>
+            <span class="lg avail"><i></i>{{ 'rm.legend.available' | t }}</span>
+            <span class="lg lock"><i></i>{{ 'rm.legend.locked' | t }}</span>
+          </div>
+        </div>
+
+        <div class="journey" [class.in]="revealed()">
+          <div class="spine" aria-hidden="true"><div class="spine__done"></div></div>
+          <div class="spine__pulse" aria-hidden="true"></div>
+
+          @for (phase of visiblePhases(); track phase.index) {
+            @if (phase.status === 'current') {
+              <!-- CURRENT phase → expanded feature card -->
+              <div class="stop stop--feature is-current" data-tour="roadmap-start">
+                <div class="feature-card">
+                  <div class="feature-grid">
+                    <div class="feature-node">
+                      <div class="node node--current" style="cursor:pointer" role="link" tabindex="0"
+                           routerLink="/learning/current" [attr.aria-label]="'Open learning session: ' + phase.name"
+                           (keydown.enter)="goToSession()" (keydown.space)="goToSession()">
+                        <svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+                      </div>
+                      <div class="feature-ring-label"><b>{{ phase.progress }}%</b><span>{{ 'rm.inProgress' | t }}</span></div>
+                    </div>
+                    <div class="feature-main">
+                      <div class="feature-head">
+                        <span class="live-pill">{{ 'rm.youAreHere' | t }}</span>
+                        <span class="card-dur" style="font-size:11.5px">⏱ {{ durationText(phase.weeks) }}</span>
+                        <span class="card-dur" style="margin-left:0">· {{ phaseNum(phase.index) }}</span>
+                      </div>
+                      <h3>{{ phase.name }}</h3>
+                      @if (phase.description) { <p class="desc">{{ phase.description }}</p> }
+                      @if (phase.skills.length) {
+                        <div class="skills" style="margin-top:14px">@for (s of phase.skills; track s) { <span>{{ s }}</span> }</div>
+                      }
+                      @if (phase.objectives.length) {
+                        <div class="obj-block obj-block--full">
+                          <h5><span class="oi violet">◎</span> {{ 'rm.objectives' | t }}</h5>
+                          <ul>@for (o of phase.objectives; track o) { <li><span class="chk off"></span>{{ o }}</li> }</ul>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                </div>
+              </div>
+            } @else {
+              <!-- Completed / Available / Locked → node; card on hover (locked has no card) -->
+              <div class="stop"
+                   [class.stop--left]="phase.side === 'left'"
+                   [class.stop--right]="phase.side === 'right'"
+                   [class.is-done]="phase.status === 'done'"
+                   [class.is-locked]="phase.status === 'locked'"
+                   [class.has-card]="phase.status !== 'locked'">
+                <div class="node-anchor">
+                  <div class="node"
+                       [class.node--done]="phase.status === 'done'"
+                       [class.node--avail]="phase.status === 'avail'"
+                       [class.node--locked]="phase.status === 'locked'"
+                       tabindex="0" [attr.aria-label]="phase.name + ' — ' + phase.status">
+                    @switch (phase.status) {
+                      @case ('done') {
+                        <svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      }
+                      @case ('locked') {
+                        <svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+                      }
+                      @default {
+                        <span class="num">{{ phase.index + 1 }}</span>
+                      }
+                    }
+                  </div>
+                </div>
+
+                @if (phase.status !== 'locked') {
+                  <div class="stop__card">
+                    <div class="card-top">
+                      @if (phase.status === 'done') {
+                        <span class="card-status s-done">{{ 'rm.completed' | t }}</span>
+                      } @else {
+                        <span class="card-status s-avail">{{ 'rm.legend.available' | t }}</span>
+                      }
+                      <span class="card-dur">⏱ {{ durationText(phase.weeks) }}</span>
+                    </div>
+                    <h3>{{ phase.name }}</h3>
+                    @if (phase.description) { <p class="desc">{{ phase.description }}</p> }
+                    <div class="card-prog">
+                      <div class="bar"><i [style.width.%]="revealed() ? phase.progress : 0"></i></div>
+                      <span class="pct">{{ phase.progress === 100 ? '100%' : phase.progress + '%' }}</span>
+                    </div>
+                    @if (phase.skills.length) {
+                      <div class="skills">@for (s of phase.skills; track s) { <span>{{ s }}</span> }</div>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          }
+        </div>
+
+        @if (showPager()) {
+          <div class="pager">
+            <button class="pager-btn" (click)="prev()" [disabled]="page() === 0" aria-label="Previous phases">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <span class="pager-info">{{ page() + 1 }} / {{ pageCount() }}</span>
+            <button class="pager-btn" (click)="next()" [disabled]="page() === pageCount() - 1" aria-label="Next phases">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+        }
+      } @else if (!loading()) {
+        <section class="empty">
+          <h2>{{ 'rm.empty.title' | t }}</h2>
+          <p>{{ 'rm.empty.body' | t }}</p>
+          <a class="btn btn-primary" routerLink="/onboarding">{{ 'rm.empty.start' | t }} <span aria-hidden="true">→</span></a>
+        </section>
+      }
+
+    </div><!-- /content -->
+  </main>
+</app-sidebar>

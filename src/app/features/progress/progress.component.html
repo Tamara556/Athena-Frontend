@@ -1,0 +1,152 @@
+<div class="pg-root">
+<div class="noise" aria-hidden="true"></div>
+<div class="page-mesh" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+
+<app-sidebar>
+  <main class="main">
+    <header class="topbar" [class.scrolled]="scrolled()">
+      <button class="hamburger" type="button" aria-label="Open menu" (click)="openDrawer()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+      <div class="crumb"><span class="root">Athena</span><span class="sep">›</span><b>{{ 'progress.title' | t }}</b></div>
+      <div class="topbar-spacer"></div>
+      <label class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input type="text" [placeholder]="'profile.search' | t" aria-label="Search"><kbd>⌘K</kbd></label>
+      <app-lang-select></app-lang-select><app-theme-toggle></app-theme-toggle><button class="icon-btn" type="button" aria-label="Notifications"><span class="dot"></span><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg></button>
+    </header>
+
+    <div class="pg">
+
+      <!-- HERO -->
+      <section class="pg-hero reveal">
+        <span class="eyebrow">{{ 'progress.hero.eyebrow' | t }}</span>
+        <h1>{{ 'progress.hero.your' | t }} <span class="grad-text">{{ 'progress.hero.titleWord' | t }}</span></h1>
+        <p class="sub">{{ 'progress.hero.sub' | t }}</p>
+        <p class="supp">{{ 'progress.hero.supp' | t }}</p>
+      </section>
+
+      @if (emptyState()) {
+        <!-- EMPTY STATE -->
+        <section class="empty show" aria-live="polite">
+          <div class="empty-emblem" aria-hidden="true"><svg viewBox="0 0 120 120"><use href="#athenaMark"/></svg></div>
+          <h2>{{ 'profile.empty.title' | t }}</h2>
+          <p>{{ 'progress.empty.body1' | t }}</p>
+          <p>{{ 'progress.empty.body2' | t }}</p>
+          <div class="empty-foot"><button class="btn btn-glass btn-sm" type="button" (click)="showEmpty.set(false)">{{ 'progress.empty.back' | t }}</button></div>
+        </section>
+      } @else {
+
+      <!-- BEFORE vs NOW -->
+      @if (transform(); as tf) {
+        <section class="transform reveal" aria-labelledby="tf-title">
+          <h2 id="tf-title" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">{{ 'progress.tf.srTitle' | t }}</h2>
+          <div class="t-heads">
+            <div class="t-head then"><span class="tag">{{ 'progress.tf.started' | t }}</span><div class="dt">{{ tf.startLabel }}</div></div>
+            <div class="t-arrow-head" aria-hidden="true"></div>
+            <div class="t-head now"><span class="tag">{{ 'progress.tf.today' | t }}</span><div class="dt">{{ tf.nowLabel }}</div></div>
+          </div>
+          <div class="t-list">
+            @for (row of tf.rows; track row.caption) {
+              <div class="trow">
+                <div class="cap">{{ row.caption }}</div>
+                <div class="pair">
+                  <div class="t-then">{{ row.then.display }}@if (row.then.percent !== null) {<div class="tbar"><i [style.width.%]="loaded() ? row.then.percent : 0"></i></div>}</div>
+                  <div class="t-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+                  <div class="t-now">{{ row.now.display }}@if (row.now.percent !== null) {<div class="tbar"><i [style.width.%]="loaded() ? row.now.percent : 0"></i></div>}</div>
+                </div>
+              </div>
+            }
+          </div>
+          <div class="t-foot">
+            <svg class="tm" viewBox="0 0 120 120" aria-hidden="true"><use href="#athenaMark"/></svg>
+            <span>{{ 'progress.tf.foot' | t }} <b>{{ 'progress.tf.footBold' | t }}</b></span>
+          </div>
+          <div class="t-skel" [class.hide]="loaded()"><span class="sp"></span> {{ 'progress.tf.gathering' | t }}</div>
+        </section>
+      }
+
+      <!-- GROWTH HIGHLIGHTS -->
+      <section class="section reveal">
+        <div class="section-head"><h2>{{ 'progress.growth.title' | t }}</h2><p>{{ 'progress.growth.sub' | t }}</p></div>
+        <div class="growth">
+          @for (h of highlights(); track h.name) {
+            <div class="gline"><div class="gname">@if (h.lead) {<span class="lead">{{ h.lead }}</span> }{{ h.name }}</div><div class="gtrack" [style.--w]="h.trackPercent + '%'"><i></i></div><div class="gplus">+{{ h.gainPercent }}%</div></div>
+          }
+        </div>
+      </section>
+
+      <!-- CONFIDENCE JOURNEY -->
+      <section class="section reveal">
+        <div class="section-head"><h2>{{ 'progress.conf.title' | t }}</h2><p>{{ 'progress.conf.sub' | t }}</p></div>
+        <div class="journey-q">
+          @for (q of journey(); track q.when) {
+            <div class="jq" [class.last]="q.isLast"><div class="when"><span class="dot" [style.background]="q.color"></span>{{ q.when }}</div><blockquote>"{{ q.quote }}"</blockquote></div>
+          }
+        </div>
+      </section>
+
+      <!-- OBSERVATIONS -->
+      <section class="section reveal">
+        <div class="section-head"><h2>{{ 'progress.obs.title' | t }}</h2><p>{{ 'progress.obs.sub' | t }}</p></div>
+        <div class="obs-grid">
+          @for (o of observations(); track $index) {
+            <div class="obs"><span class="obs-ic" [style.background]="o.gradient">{{ o.icon }}</span><p>{{ o.before }}<b>{{ o.bold }}</b>{{ o.after }}</p></div>
+          }
+        </div>
+      </section>
+
+      <!-- MILESTONES -->
+      <section class="section reveal">
+        <div class="section-head"><h2>{{ 'progress.miles.title' | t }}</h2><p>{{ 'progress.miles.sub' | t }}</p></div>
+        <div class="timeline">
+          @for (m of milestones(); track $index) {
+            <div class="mile"><span class="mnode" [style.background]="m.gradient">{{ m.icon }}</span><div class="mbody"><h4>{{ m.title }}</h4><div class="md">{{ m.dateLabel }}</div></div></div>
+          }
+        </div>
+      </section>
+
+      <!-- FUTURE POTENTIAL -->
+      <section class="section reveal">
+        <div class="future">
+          <div class="future-head"><svg viewBox="0 0 120 120" aria-hidden="true"><use href="#athenaMark"/></svg><h3>{{ 'progress.future.title' | t }}</h3></div>
+          <div class="future-list">
+            @for (f of future(); track $index) {
+              <div class="fcard"><div class="fi" [style.background]="f.gradient">{{ f.icon }}</div><p>{{ f.before }}<b>{{ f.bold }}</b>{{ f.after }}</p></div>
+            }
+          </div>
+        </div>
+      </section>
+
+      <!-- REFLECTION -->
+      <section class="section reveal">
+        <div class="reflect">
+          <div class="reflect-head"><span class="rm">🪞</span><h3>{{ 'progress.reflect.title' | t }}</h3></div>
+          <p class="reflect-sub">{{ 'progress.reflect.sub' | t }}</p>
+          <div class="prompts">
+            @for (p of prompts(); track $index) {
+              <button class="prompt" type="button" [class.on]="promptIndex() === $index" (click)="selectPrompt($index)">{{ p.label }}</button>
+            }
+          </div>
+          <textarea [placeholder]="placeholder()" [value]="draft()" (input)="onDraft($event)"></textarea>
+          <div class="reflect-foot">
+            <span class="hint"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="13" rx="3"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg> {{ 'progress.reflect.private' | t }}</span>
+            <span class="spacer"></span>
+            <button class="btn btn-primary btn-sm" type="button" [disabled]="saving()" (click)="saveReflection()">{{ saving() ? ('settings.common.saving' | t) : ('progress.reflect.save' | t) }}</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- preview empty state -->
+      <div class="preview-toggle">
+        <button class="btn-ghost" type="button" (click)="showEmpty.set(true)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg> {{ 'progress.previewEmpty' | t }}</button>
+      </div>
+
+      }
+
+    </div>
+  </main>
+</app-sidebar>
+
+<!-- toast -->
+<div class="toast" [class.show]="toastShow()" role="status" aria-live="polite">
+  <span class="ti"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+  <div><b>{{ 'progress.toast.title' | t }}</b><span>{{ 'progress.toast.sub' | t }}</span></div>
+</div>
+</div>

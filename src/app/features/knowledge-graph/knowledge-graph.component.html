@@ -1,0 +1,219 @@
+<div class="kg-root">
+<div class="noise" aria-hidden="true"></div>
+<div class="page-mesh" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="edgeHot" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8B5CF6"/><stop offset=".5" stop-color="#F472B6"/><stop offset="1" stop-color="#22D3EE"/></linearGradient>
+  </defs>
+</svg>
+
+<app-sidebar>
+  <main class="main">
+    <header class="topbar" [class.scrolled]="scrolled()">
+      <button class="hamburger" type="button" aria-label="Open menu" (click)="openDrawer()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+      <div class="crumb"><span class="root">Athena</span><span class="sep">›</span><b>{{ 'kg.title' | t }}</b></div>
+      <div class="topbar-spacer"></div>
+      <label class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input #searchInput type="text" [placeholder]="'kg.search' | t" aria-label="Search" (input)="onSearch($event)"><kbd>⌘K</kbd></label>
+      <app-lang-select></app-lang-select><app-theme-toggle></app-theme-toggle><button class="icon-btn" type="button" aria-label="Notifications"><span class="dot"></span><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg></button>
+    </header>
+
+    <div class="kg-page">
+
+      <!-- HERO -->
+      <section class="kg-hero reveal">
+        <span class="eyebrow">{{ 'kg.hero.eyebrow' | t }}</span>
+        <h1>{{ 'kg.hero.your' | t }} <span class="grad-text">{{ 'kg.hero.titleWord' | t }}</span></h1>
+        <p class="sub">{{ 'kg.hero.sub1' | t }} <b>{{ 'kg.hero.sub2' | t }}</b></p>
+        <span class="kg-hero-note">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l2.5 2.5M16.5 16.5 19 19M19 5l-2.5 2.5M7.5 16.5 5 19"/></svg>
+          {{ 'kg.hero.note' | t }}
+        </span>
+      </section>
+
+      <!-- STUDIO: constellation + rail -->
+      <section class="studio reveal">
+        <!-- CONSTELLATION -->
+        <div class="constellation">
+          <div class="const-bar">
+            <span class="ct">{{ 'kg.skillMap' | t }}</span>
+            <div class="const-legend">
+              <span class="cl m"><i></i>{{ 'kg.legend.mastered' | t }}</span>
+              <span class="cl l"><i></i>{{ 'kg.legend.learning' | t }}</span>
+              <span class="cl w"><i></i>{{ 'kg.legend.growing' | t }}</span>
+            </div>
+          </div>
+          <div class="const-scroll">
+            <div class="const-stage" [class.mapped]="ready()" [class.has-focus]="focusMode()">
+              <!-- edges -->
+              <svg class="edges" viewBox="0 0 1000 680" preserveAspectRatio="none" aria-hidden="true">
+                @for (edge of edges(); track trackEdge($index, edge)) {
+                  <g class="edge draw" [class.hl]="isEdgeHighlighted(edge)"><path [attr.d]="edgePath(edge)" pathLength="1"/><text [attr.x]="edge.labelX" [attr.y]="edge.labelY">{{ edge.relationship }}</text></g>
+                }
+              </svg>
+
+              <!-- nodes -->
+              @for (node of nodes(); track node.id) {
+                <button class="node" type="button"
+                  [class.m]="nodeClass(node.status) === 'm'" [class.l]="nodeClass(node.status) === 'l'" [class.w]="nodeClass(node.status) === 'w'"
+                  [class.sel]="isSelected(node.id)" [class.near]="isNear(node.id)"
+                  [style.left.%]="node.x" [style.top.%]="node.y"
+                  [attr.aria-label]="node.title + ', ' + statusName(node.status) + ', ' + node.mastery + ' percent'"
+                  (click)="select(node.id)">
+                  <span class="node-orb" [style.width.px]="node.size" [style.height.px]="node.size" [style.--p]="node.mastery"><span class="pc">{{ node.mastery }}%</span></span><span class="node-label">{{ node.title }}</span>
+                </button>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- EXPLORE + WHY THIS MATTERS (below the graph) -->
+        <div class="under">
+          <!-- explore panel -->
+          @if (selectedNode(); as sel) {
+            <div class="explore" [class.swap]="swapping()"
+              [class.st-m]="nodeClass(sel.status) === 'm'" [class.st-l]="nodeClass(sel.status) === 'l'" [class.st-w]="nodeClass(sel.status) === 'w'"
+              aria-live="polite">
+              <div class="explore-head">
+                <div class="eh-row">
+                  <span class="eh-orb">{{ exploreIcon(sel.status) }}</span>
+                  <div>
+                    <h3>{{ sel.title }}</h3>
+                    <div class="eh-meta"><span class="status-tag" [class.tag-m]="nodeClass(sel.status) === 'm'" [class.tag-l]="nodeClass(sel.status) === 'l'" [class.tag-w]="nodeClass(sel.status) === 'w'">{{ statusName(sel.status) }}</span><span class="eh-pct">{{ sel.mastery }}% {{ 'kg.mastery' | t }}</span></div>
+                  </div>
+                </div>
+                <div class="eh-bar"><i [style.width.%]="sel.mastery"></i></div>
+              </div>
+              <div class="explore-body">
+                @let ex = exploration();
+                @if (ex?.whyThisLevel; as why) {
+                  <div class="ex-block">
+                    <h5>◎ {{ 'kg.ex.whyLevel' | t }}</h5>
+                    <p>{{ why }}</p>
+                  </div>
+                }
+                <div class="ex-block">
+                  <h5>⌁ {{ 'kg.ex.connected' | t }}</h5>
+                  <div class="ex-related">@for (skill of connectedSkills(); track skill) {<span (click)="selectSkill(skill)">{{ skill }}</span>}</div>
+                </div>
+                @if (ex?.interviewSignal; as sig) {
+                  <div class="ex-block">
+                    <h5>🎤 {{ 'kg.ex.interview' | t }}</h5>
+                    <div class="ex-interview"><span class="iv"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v4"/></svg></span><span>{{ sig.checkpoint }} — {{ sig.note }}</span></div>
+                  </div>
+                }
+                @if (ex && ex.recommendedNext.length) {
+                  <div class="ex-block">
+                    <h5>→ {{ 'kg.ex.next' | t }}</h5>
+                    <ul class="ex-next">@for (item of ex.recommendedNext; track item) {<li><span class="nx">→</span>{{ item }}</li>}</ul>
+                  </div>
+                }
+                @if (ex?.recentMovementLabel; as mv) {
+                  <div class="ex-block">
+                    <h5>📈 {{ 'kg.ex.movement' | t }}</h5>
+                    <span class="ex-recent">{{ mv }}</span>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+
+          <!-- why this matters -->
+          <div class="why-matters">
+            <div class="wm-head"><svg viewBox="0 0 120 120" aria-hidden="true"><use href="#athenaMark"/></svg><h4>{{ 'kg.whyMatters' | t }}</h4></div>
+            <div class="wm-list">
+              @for (item of whyItMatters(); track $index; let i = $index) {
+                <div class="wm"><span class="wi" [style.background]="whyGradient(i)">{{ whyIcon(i) }}</span><p>{{ item.before }}<b>{{ item.bold }}</b>{{ item.after }}</p></div>
+              }
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MENTOR INSIGHTS -->
+      <section class="section reveal">
+        <div class="section-head"><h2>{{ 'kg.mentor.title' | t }}</h2><p>{{ 'kg.mentor.sub' | t }}</p></div>
+        <div class="insights-grid">
+          @for (insight of mentorInsights(); track insight.kind) {
+            <article class="insight-card">
+              <div class="ic-ico" [style.background]="mentorGradient(insight.kind)">{{ mentorIcon(insight.kind) }}</div>
+              <div class="ic-tag">{{ mentorTag(insight.kind) }}</div>
+              <p>{{ insight.before }}<b>{{ insight.skill }}</b>{{ insight.after }}</p>
+            </article>
+          }
+        </div>
+      </section>
+
+      <!-- EVOLUTION TIMELINE -->
+      @if (evolution(); as evo) {
+      <section class="section reveal">
+        <div class="section-head"><h2>{{ 'kg.evo.title' | t }}</h2><p>{{ 'kg.evo.sub' | t }}</p></div>
+          <div class="evo">
+            <div class="evo-top">
+              <div class="evo-headline"><b>{{ evo.headlineSkill }}</b><span>{{ evo.fromMastery }}% → {{ evo.toMastery }}% {{ 'kg.evo.sinceStarted' | t }}</span></div>
+              <span class="evo-gain"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 7-7M21 8V3h-5"/></svg> {{ evo.gainLabel }}</span>
+            </div>
+            <svg class="evo-chart" viewBox="0 0 900 280" role="img" [attr.aria-label]="'kg.evo.aria' | t">
+              <g stroke="rgba(21,21,31,.06)" stroke-width="1">
+                <line x1="60" y1="40" x2="880" y2="40"/><line x1="60" y1="100" x2="880" y2="100"/><line x1="60" y1="160" x2="880" y2="160"/><line x1="60" y1="220" x2="880" y2="220"/>
+              </g>
+              <g fill="var(--ink-faint)" font-family="DM Mono" font-size="11" text-anchor="end">
+                <text x="48" y="44">100%</text><text x="48" y="104">66%</text><text x="48" y="164">33%</text><text x="48" y="224">0%</text>
+              </g>
+              <g fill="var(--ink-faint)" font-family="DM Mono" font-size="11" text-anchor="middle">
+                <text x="120" y="248">{{ 'kg.evo.weekN' | t: { n: 1 } }}</text><text x="380" y="248">{{ 'kg.evo.weekN' | t: { n: 4 } }}</text><text x="640" y="248">{{ 'kg.evo.weekN' | t: { n: 8 } }}</text><text x="840" y="248">{{ 'kg.evo.now' | t }}</text>
+              </g>
+              @for (series of evo.series; track series.label) {
+                <polyline class="evo-line" [style.stroke]="series.stroke" [style.transition-delay]="series.delaySeconds + 's'" [attr.points]="points(series)"/>
+              }
+              <g class="evo-dot">
+                @for (dot of evolutionDots(); track $index) {
+                  <circle [attr.cx]="dot.cx" [attr.cy]="dot.cy" [attr.r]="dot.r" [attr.fill]="dot.fill"/>
+                }
+              </g>
+            </svg>
+            <div class="evo-legend">
+              @for (series of evo.series; track series.label) {
+                <span class="el"><i [style.background]="legendColor(series)"></i>{{ series.label }}</span>
+              }
+            </div>
+          </div>
+      </section>
+      }
+
+      <!-- HIDDEN OPPORTUNITIES -->
+      @if (opportunities().length) {
+      <section class="section reveal">
+        <div class="section-head"><h2>{{ 'kg.opp.title' | t }}</h2><p>{{ 'kg.opp.sub' | t }}</p></div>
+        <div class="gentle-grid">
+          @for (card of opportunities(); track card.id) {
+            <article class="gentle">
+              <div class="gentle-top"><span class="gentle-ico" [style.background]="card.gradient">{{ card.icon }}</span><div><h4>{{ card.title }}</h4><div class="meta">{{ card.meta }}</div></div></div>
+              <p>{{ card.before }}<b>{{ card.bold }}</b>{{ card.after }}</p>
+              <div class="gentle-foot"><span class="impact">{{ card.impact }}</span><button class="btn btn-sm" [class.btn-glass]="card.actionVariant === 'glass'" [class.btn-primary]="card.actionVariant === 'primary'" type="button" [disabled]="actionPending() === card.id" (click)="apply(card)">{{ actionPending() === card.id ? ('kg.working' | t) : card.actionLabel }}</button></div>
+            </article>
+          }
+        </div>
+      </section>
+      }
+
+      <!-- LEARNING ACCELERATORS -->
+      @if (accelerators().length) {
+      <section class="section reveal">
+        <div class="section-head"><h2>{{ 'kg.acc.title' | t }}</h2><p>{{ 'kg.acc.sub' | t }}</p></div>
+        <div class="gentle-grid">
+          @for (card of accelerators(); track card.id) {
+            <article class="gentle">
+              <div class="gentle-top"><span class="gentle-ico" [style.background]="card.gradient">{{ card.icon }}</span><div><h4>{{ card.title }}</h4><div class="meta">{{ card.meta }}</div></div></div>
+              <p>{{ card.before }}<b>{{ card.bold }}</b>{{ card.after }}</p>
+              <div class="gentle-foot"><span class="impact">{{ card.impact }}</span><button class="btn btn-sm" [class.btn-glass]="card.actionVariant === 'glass'" [class.btn-primary]="card.actionVariant === 'primary'" type="button" [disabled]="actionPending() === card.id" (click)="apply(card)">{{ actionPending() === card.id ? ('kg.working' | t) : card.actionLabel }}</button></div>
+            </article>
+          }
+        </div>
+      </section>
+      }
+
+    </div>
+  </main>
+</app-sidebar>
+</div>

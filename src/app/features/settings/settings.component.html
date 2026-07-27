@@ -1,0 +1,389 @@
+<div class="set-root">
+<div class="noise" aria-hidden="true"></div>
+<div class="page-mesh" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+
+<app-sidebar>
+  <main class="main">
+    <header class="topbar" [class.scrolled]="scrolled()">
+      <button class="hamburger" type="button" aria-label="Open menu" (click)="openDrawer()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+      <div class="crumb"><span class="root">Athena</span><span class="sep">›</span><b>{{ 'settings.hero.title' | t }}</b></div>
+      <div class="topbar-spacer"></div>
+      <label class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input type="text" [placeholder]="'settings.search' | t" aria-label="Search"><kbd>⌘K</kbd></label>
+      <app-lang-select></app-lang-select><app-theme-toggle></app-theme-toggle><button class="icon-btn" type="button" aria-label="Notifications"><span class="dot"></span><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg></button>
+    </header>
+
+    <div class="st">
+
+      <!-- HERO -->
+      <section class="st-hero reveal">
+        <span class="eyebrow">{{ 'settings.hero.eyebrow' | t }}</span>
+        <h1><span class="grad-text">{{ 'settings.hero.title' | t }}</span></h1>
+        <p class="sub">{{ 'settings.hero.sub' | t }}</p>
+        <p class="supp">{{ 'settings.hero.supp' | t }}</p>
+      </section>
+
+      @if (!loaded()) {
+        <!-- SKELETON -->
+        <div aria-hidden="true">
+          <div class="sk-card"><div class="sk" style="width:40%;height:18px;margin-bottom:18px"></div><div class="sk" style="width:100%;height:54px;margin-bottom:12px"></div><div class="sk" style="width:100%;height:54px"></div></div>
+          <div class="sk-card"><div class="sk" style="width:34%;height:18px;margin-bottom:18px"></div><div class="sk" style="width:100%;height:46px;margin-bottom:12px"></div><div class="sk" style="width:100%;height:46px"></div></div>
+        </div>
+      } @else {
+        <!-- REAL SETTINGS -->
+        <div>
+
+          <!-- ACCOUNT -->
+          <section class="scard reveal">
+            <div class="scard-head">
+              <span class="si" style="background:linear-gradient(135deg,#8B5CF6,#A855F7)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>
+              <div><h2>{{ 'settings.account.title' | t }}</h2><p>{{ 'settings.account.desc' | t }}</p></div>
+            </div>
+            <div class="scard-body">
+              <div class="acct">
+                <div class="acct-ava" role="button" tabindex="0" [attr.aria-label]="'settings.account.changePhoto' | t" (click)="avatarInput.click()" (keydown.enter)="avatarInput.click()">
+                  @if (avatarUrl()) { <img [src]="avatarUrl()" alt="" /> } @else { {{ initials() }} }
+                </div>
+                <input #avatarInput type="file" accept="image/png,image/jpeg,image/gif" hidden (change)="onAvatarSelected($event)">
+                <div class="acct-id">
+                  <b>{{ displayName() }}</b>
+                  <span>{{ email() }}</span>
+                </div>
+              </div>
+              <div class="act-grid" style="margin-top:14px">
+                <button class="act" type="button" (click)="openDialog('profile')">
+                  <span class="ai" style="background:linear-gradient(135deg,#8B5CF6,#A855F7)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span>
+                  <span class="abody"><b>{{ 'settings.account.editProfile' | t }}</b><span>{{ 'settings.account.nameDetails' | t }}</span></span>
+                  <span class="arrow"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+                </button>
+                <button class="act" type="button" (click)="openDialog('email')">
+                  <span class="ai" style="background:linear-gradient(135deg,#06B6D4,#22D3EE)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m3 7 9 6 9-6"/></svg></span>
+                  <span class="abody"><b>{{ 'settings.account.changeEmail' | t }}</b><span>{{ email() }}</span></span>
+                  <span class="arrow"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- LEARNING PREFERENCES -->
+          <section class="scard reveal">
+            <div class="scard-head">
+              <span class="si" style="background:linear-gradient(135deg,#34D399,#22D3EE)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></span>
+              <div><h2>{{ 'settings.learn.title' | t }}</h2><p>{{ 'settings.learn.desc' | t }}</p></div>
+            </div>
+            <div class="scard-body">
+              <div class="set-row">
+                <div class="set-info"><b>{{ 'settings.learn.availability' | t }}</b><span>{{ 'settings.learn.availabilityDesc' | t }}</span></div>
+                <div class="set-control"><div class="seg" role="group" [attr.aria-label]="'settings.learn.availability' | t">
+                  <button class="seg-opt" type="button" [class.active]="segs()['availability']==='30m'" (click)="selectSeg('availability','30m')">{{ 'settings.learn.30m' | t }}</button>
+                  <button class="seg-opt" type="button" [class.active]="segs()['availability']==='1h'" (click)="selectSeg('availability','1h')">{{ 'settings.learn.1h' | t }}</button>
+                  <button class="seg-opt" type="button" [class.active]="segs()['availability']==='2h'" (click)="selectSeg('availability','2h')">{{ 'settings.learn.2h' | t }}</button>
+                  <button class="seg-opt" type="button" [class.active]="segs()['availability']==='4h'" (click)="selectSeg('availability','4h')">{{ 'settings.learn.4h' | t }}</button>
+                </div></div>
+              </div>
+              <div class="set-row">
+                <div class="set-info"><b>{{ 'settings.learn.difficulty' | t }}</b><span>{{ 'settings.learn.difficultyDesc' | t }}</span></div>
+                <div class="set-control"><div class="seg" role="group" [attr.aria-label]="'settings.learn.difficulty' | t">
+                  <button class="seg-opt" type="button" [class.active]="segs()['difficulty']==='gentle'" (click)="selectSeg('difficulty','gentle')">{{ 'settings.learn.gentle' | t }}</button>
+                  <button class="seg-opt" type="button" [class.active]="segs()['difficulty']==='balanced'" (click)="selectSeg('difficulty','balanced')">{{ 'settings.learn.balanced' | t }}</button>
+                  <button class="seg-opt" type="button" [class.active]="segs()['difficulty']==='challenging'" (click)="selectSeg('difficulty','challenging')">{{ 'settings.learn.challenging' | t }}</button>
+                </div></div>
+              </div>
+              <div class="set-row">
+                <div class="set-info"><b>{{ 'settings.learn.style' | t }}</b><span>{{ 'settings.learn.styleDesc' | t }}</span></div>
+                <div class="set-control"><div class="seg" role="group" [attr.aria-label]="'settings.learn.style' | t">
+                  <button class="seg-opt" type="button" [class.active]="segs()['style']==='practical'" (click)="selectSeg('style','practical')">{{ 'settings.learn.practical' | t }}</button>
+                  <button class="seg-opt" type="button" [class.active]="segs()['style']==='visual'" (click)="selectSeg('style','visual')">{{ 'settings.learn.visual' | t }}</button>
+                  <button class="seg-opt" type="button" [class.active]="segs()['style']==='reading'" (click)="selectSeg('style','reading')">{{ 'settings.learn.reading' | t }}</button>
+                  <button class="seg-opt" type="button" [class.active]="segs()['style']==='mixed'" (click)="selectSeg('style','mixed')">{{ 'settings.learn.mixed' | t }}</button>
+                </div></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ATHENA EXPERIENCE -->
+          <section class="scard reveal">
+            <div class="scard-head">
+              <span class="si" style="background:linear-gradient(135deg,#A855F7,#F472B6)"><svg width="20" height="20" viewBox="0 0 120 120" aria-hidden="true"><use href="#athenaMark"/></svg></span>
+              <div><h2>{{ 'settings.exp.title' | t }}</h2><p>{{ 'settings.exp.desc' | t }}</p></div>
+            </div>
+            <div class="scard-body">
+              <div class="set-row">
+                <div class="set-info"><b>{{ 'settings.exp.tone' | t }}</b><span>{{ 'settings.exp.toneDesc' | t }}</span></div>
+                <div class="set-control"><div class="seg" role="group" [attr.aria-label]="'settings.exp.tone' | t">
+                  <button class="seg-opt" type="button" [class.active]="segs()['tone']==='encouraging'" (click)="selectSeg('tone','encouraging')">{{ 'settings.exp.encouraging' | t }}</button>
+                  <button class="seg-opt" type="button" [class.active]="segs()['tone']==='direct'" (click)="selectSeg('tone','direct')">{{ 'settings.exp.direct' | t }}</button>
+                  <button class="seg-opt" type="button" [class.active]="segs()['tone']==='reflective'" (click)="selectSeg('tone','reflective')">{{ 'settings.exp.reflective' | t }}</button>
+                </div></div>
+              </div>
+              <div class="set-row">
+                <div class="set-info"><b>{{ 'settings.exp.motivational' | t }}</b><span>{{ 'settings.exp.motivationalDesc' | t }}</span></div>
+                <div class="set-control"><button class="toggle" type="button" [class.on]="togs()['motivational']" role="switch" [attr.aria-checked]="togs()['motivational']" [attr.aria-label]="'settings.exp.motivational' | t" (click)="toggle('motivational')"></button></div>
+              </div>
+              <div class="set-row">
+                <div class="set-info"><b>{{ 'settings.exp.reflection' | t }}</b><span>{{ 'settings.exp.reflectionDesc' | t }}</span></div>
+                <div class="set-control"><button class="toggle" type="button" [class.on]="togs()['reflection']" role="switch" [attr.aria-checked]="togs()['reflection']" [attr.aria-label]="'settings.exp.reflection' | t" (click)="toggle('reflection')"></button></div>
+              </div>
+              <div class="set-row">
+                <div class="set-info"><b>{{ 'settings.exp.adaptive' | t }}</b><span>{{ 'settings.exp.adaptiveDesc' | t }}</span></div>
+                <div class="set-control"><button class="toggle" type="button" [class.on]="togs()['adaptive']" role="switch" [attr.aria-checked]="togs()['adaptive']" [attr.aria-label]="'settings.exp.adaptive' | t" (click)="toggle('adaptive')"></button></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- NOTIFICATIONS -->
+          <section class="scard reveal">
+            <div class="scard-head">
+              <span class="si" style="background:linear-gradient(135deg,#FBBF24,#FB923C)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg></span>
+              <div><h2>{{ 'settings.notif.title' | t }}</h2><p>{{ 'settings.notif.desc' | t }}</p></div>
+            </div>
+            <div class="scard-body">
+              <div class="set-row"><div class="set-info"><b>{{ 'settings.notif.daily' | t }}</b><span>{{ 'settings.notif.dailyDesc' | t }}</span></div><div class="set-control"><button class="toggle" type="button" [class.on]="togs()['dailyReminder']" role="switch" [attr.aria-checked]="togs()['dailyReminder']" [attr.aria-label]="'settings.notif.daily' | t" (click)="toggle('dailyReminder')"></button></div></div>
+              <div class="set-row"><div class="set-info"><b>{{ 'settings.notif.weekly' | t }}</b><span>{{ 'settings.notif.weeklyDesc' | t }}</span></div><div class="set-control"><button class="toggle" type="button" [class.on]="togs()['weeklySummary']" role="switch" [attr.aria-checked]="togs()['weeklySummary']" [attr.aria-label]="'settings.notif.weekly' | t" (click)="toggle('weeklySummary')"></button></div></div>
+              <div class="set-row"><div class="set-info"><b>{{ 'settings.notif.interview' | t }}</b><span>{{ 'settings.notif.interviewDesc' | t }}</span></div><div class="set-control"><button class="toggle" type="button" [class.on]="togs()['interviewReminders']" role="switch" [attr.aria-checked]="togs()['interviewReminders']" [attr.aria-label]="'settings.notif.interview' | t" (click)="toggle('interviewReminders')"></button></div></div>
+              <div class="set-row"><div class="set-info"><b>{{ 'settings.notif.milestone' | t }}</b><span>{{ 'settings.notif.milestoneDesc' | t }}</span></div><div class="set-control"><button class="toggle" type="button" [class.on]="togs()['milestones']" role="switch" [attr.aria-checked]="togs()['milestones']" [attr.aria-label]="'settings.notif.milestone' | t" (click)="toggle('milestones')"></button></div></div>
+            </div>
+          </section>
+
+          <!-- PRIVACY -->
+          <section class="scard reveal">
+            <div class="scard-head">
+              <span class="si" style="background:linear-gradient(135deg,#06B6D4,#8B5CF6)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span>
+              <div><h2>{{ 'settings.priv.title' | t }}</h2><p>{{ 'settings.priv.desc' | t }}</p></div>
+            </div>
+            <div class="scard-body">
+              <div class="set-row"><div class="set-info"><b>{{ 'settings.priv.personalize' | t }}</b><span>{{ 'settings.priv.personalizeDesc' | t }}</span></div><div class="set-control"><button class="toggle" type="button" [class.on]="togs()['personalize']" role="switch" [attr.aria-checked]="togs()['personalize']" [attr.aria-label]="'settings.priv.personalize' | t" (click)="toggle('personalize')"></button></div></div>
+              <div class="set-row"><div class="set-info"><b>{{ 'settings.priv.share' | t }}</b><span>{{ 'settings.priv.shareDesc' | t }}</span></div><div class="set-control"><button class="toggle" type="button" [class.on]="togs()['shareAnon']" role="switch" [attr.aria-checked]="togs()['shareAnon']" [attr.aria-label]="'settings.priv.share' | t" (click)="toggle('shareAnon')"></button></div></div>
+              <div class="act-grid" style="margin-top:16px">
+                <button class="act" type="button" [disabled]="exporting()" (click)="downloadData()">
+                  <span class="ai" style="background:linear-gradient(135deg,#06B6D4,#22D3EE)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg></span>
+                  <span class="abody"><b>{{ 'settings.priv.download' | t }}</b><span>{{ exporting() ? ('settings.priv.preparing' | t) : ('settings.priv.downloadDesc' | t) }}</span></span>
+                  <span class="arrow"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+                </button>
+                <button class="act danger" type="button" (click)="openModal()">
+                  <span class="ai"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></span>
+                  <span class="abody"><b>{{ 'settings.priv.delete' | t }}</b><span>{{ 'settings.priv.deleteDesc' | t }}</span></span>
+                  <span class="arrow"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- SECURITY -->
+          <section class="scard reveal">
+            <div class="scard-head">
+              <span class="si" style="background:linear-gradient(135deg,#8B5CF6,#06B6D4)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.5 8 8 10 4.5-2 8-5 8-10V6z"/></svg></span>
+              <div><h2>{{ 'settings.sec.title' | t }}</h2><p>{{ 'settings.sec.desc' | t }}</p></div>
+            </div>
+            <div class="scard-body">
+              <div class="act-grid">
+                <button class="act" type="button" (click)="openDialog('password')">
+                  <span class="ai" style="background:linear-gradient(135deg,#8B5CF6,#A855F7)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span>
+                  <span class="abody"><b>{{ 'settings.sec.password' | t }}</b><span>{{ 'settings.sec.passwordDesc' | t }}</span></span>
+                  <span class="arrow"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+                </button>
+                <button class="act" type="button" (click)="openDevices()">
+                  <span class="ai" style="background:linear-gradient(135deg,#06B6D4,#22D3EE)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span>
+                  <span class="abody"><b>{{ 'settings.sec.devices' | t }}</b><span>{{ 'settings.sec.devicesDesc' | t }}</span></span>
+                  <span class="arrow"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+                </button>
+                <button class="act" type="button" (click)="openTwoFactor()">
+                  <span class="ai" style="background:linear-gradient(135deg,#34D399,#22D3EE)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.5 8 8 10 4.5-2 8-5 8-10V6z"/><path d="m9 12 2 2 4-4"/></svg></span>
+                  <span class="abody"><b>{{ 'settings.sec.twofa' | t }}</b><span>{{ 'settings.sec.twofaDesc' | t }}</span></span>
+                  <span class="arrow"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+                </button>
+                <button class="act" type="button" (click)="openLoginActivity()">
+                  <span class="ai" style="background:linear-gradient(135deg,#F472B6,#A855F7)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+                  <span class="abody"><b>{{ 'settings.sec.activity' | t }}</b><span>{{ 'settings.sec.activityDesc' | t }}</span></span>
+                  <span class="arrow"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- REASSURANCE -->
+          <div class="reassure reveal">
+            <svg viewBox="0 0 120 120" aria-hidden="true"><use href="#athenaMark"/></svg>
+            <p><b>{{ 'settings.reassure.title' | t }}</b> {{ 'settings.reassure.desc' | t }}</p>
+          </div>
+
+        </div>
+      }
+    </div>
+  </main>
+</app-sidebar>
+
+<!-- sticky save bar -->
+<div class="savebar" [class.show]="dirty()" role="region" aria-label="Unsaved changes">
+  <span class="smsg"><span class="sdot"></span><span class="stext">{{ 'settings.save.unsaved' | t }}</span></span>
+  <button class="sdiscard" type="button" [disabled]="saving()" (click)="discard()">{{ 'settings.save.discard' | t }}</button>
+  <button class="ssave" type="button" [disabled]="saving()" (click)="save()">{{ saving() ? ('settings.save.saving' | t) : ('settings.save.save' | t) }}</button>
+</div>
+
+<!-- delete confirm modal -->
+<div class="modal-scrim" [class.show]="modalShow()" role="dialog" aria-modal="true" aria-labelledby="modalTitle" (click)="$event.target === $event.currentTarget && closeModal()">
+  <div class="modal">
+    <div class="mi" aria-hidden="true">🌱</div>
+    <h3 id="modalTitle">{{ 'settings.del.title' | t }}</h3>
+    <p>{{ 'settings.del.body' | t }}</p>
+    <div class="modal-acts">
+      <button class="btn btn-glass btn-sm" type="button" (click)="closeModal()">{{ 'settings.del.keep' | t }}</button>
+      <button class="btn btn-danger btn-sm" type="button" (click)="confirmDelete()">{{ 'settings.del.confirm' | t }}</button>
+    </div>
+  </div>
+</div>
+
+<!-- account dialogs -->
+<div class="modal-scrim" [class.show]="dialog()" role="dialog" aria-modal="true" (click)="$event.target === $event.currentTarget && closeDialog()">
+  @if (dialog(); as kind) {
+    <div class="modal form">
+      @switch (kind) {
+        @case ('profile') {
+          <h3>{{ 'settings.account.editProfile' | t }}</h3>
+          <div class="dlg-field"><label>{{ 'settings.dlg.firstName' | t }}</label><input type="text" autocomplete="given-name" [value]="firstName()" (input)="firstName.set(fn.value)" #fn></div>
+          <div class="dlg-field"><label>{{ 'settings.dlg.lastName' | t }}</label><input type="text" autocomplete="family-name" [value]="lastName()" (input)="lastName.set(ln.value)" #ln></div>
+        }
+        @case ('email') {
+          <h3>{{ 'settings.account.changeEmail' | t }}</h3>
+          <p class="dlg-sub">{{ 'settings.dlg.currently' | t }} {{ email() }}</p>
+          <div class="dlg-field"><label>{{ 'settings.dlg.newEmail' | t }}</label><input type="email" autocomplete="email" [value]="newEmail()" (input)="newEmail.set(ne.value)" #ne></div>
+          <div class="dlg-field"><label>{{ 'settings.dlg.currentPassword' | t }}</label><input type="password" autocomplete="current-password" [value]="emailPassword()" (input)="emailPassword.set(ep.value)" #ep></div>
+        }
+        @case ('password') {
+          <h3>{{ 'settings.sec.password' | t }}</h3>
+          <div class="dlg-field"><label>{{ 'settings.dlg.currentPassword' | t }}</label><input type="password" autocomplete="current-password" [value]="currentPassword()" (input)="currentPassword.set(cp.value)" #cp></div>
+          <div class="dlg-field"><label>{{ 'settings.dlg.newPassword' | t }}</label><input type="password" autocomplete="new-password" [value]="newPassword()" (input)="newPassword.set(np.value)" #np></div>
+        }
+      }
+      @if (formError()) { <p class="dlg-err">{{ formError() }}</p> }
+      <div class="modal-acts">
+        <button class="btn btn-glass btn-sm" type="button" [disabled]="dialogBusy()" (click)="closeDialog()">{{ 'settings.common.cancel' | t }}</button>
+        <button class="btn btn-primary btn-sm" type="button" [disabled]="dialogBusy()" (click)="submit()">{{ dialogBusy() ? ('settings.common.saving' | t) : ('settings.common.save' | t) }}</button>
+      </div>
+    </div>
+  }
+</div>
+
+<!-- login activity modal -->
+<div class="modal-scrim" [class.show]="activityShow()" role="dialog" aria-modal="true" (click)="$event.target === $event.currentTarget && closeActivity()">
+  @if (activityShow()) {
+    <div class="modal" style="max-width:440px;text-align:left">
+      <h3>{{ 'settings.act.title' | t }}</h3>
+      @if (activityLoading()) {
+        <p class="dlg-sub">{{ 'settings.act.loading' | t }}</p>
+      } @else if (activityError()) {
+        <p class="dlg-err">{{ 'settings.act.error' | t }}</p>
+      } @else if (!activity().length) {
+        <p class="dlg-sub">{{ 'settings.act.empty' | t }}</p>
+      } @else {
+        <div style="max-height:320px;overflow-y:auto;margin:8px 0 14px">
+          @for (item of activity(); track item.id) {
+            <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--line)">
+              <span style="width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--glass);border:1px solid var(--line);flex-shrink:0">🖥️</span>
+              <div style="min-width:0">
+                <b style="display:block;font-family:var(--display);font-weight:600;font-size:13.5px">{{ deviceLabel(item.userAgent) }}</b>
+                <span style="font-size:12px;color:var(--ink-faint)">{{ item.ipAddress || ('settings.common.unknownIp' | t) }} · {{ formatWhen(item.createdAt) }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      }
+      <div class="modal-acts">
+        <button class="btn btn-glass btn-sm" type="button" (click)="closeActivity()">{{ 'settings.common.close' | t }}</button>
+      </div>
+    </div>
+  }
+</div>
+
+<!-- manage devices modal -->
+<div class="modal-scrim" [class.show]="devicesShow()" role="dialog" aria-modal="true" (click)="$event.target === $event.currentTarget && closeDevices()">
+  @if (devicesShow()) {
+    <div class="modal" style="max-width:480px;text-align:left">
+      <h3>{{ 'settings.sec.devices' | t }}</h3>
+      <p class="dlg-sub">{{ 'settings.dev.desc' | t }}</p>
+      @if (devicesLoading()) {
+        <p class="dlg-sub" style="margin-top:12px">{{ 'settings.dev.loading' | t }}</p>
+      } @else if (devicesError()) {
+        <p class="dlg-err">{{ 'settings.dev.error' | t }}</p>
+      } @else if (!devices().length) {
+        <p class="dlg-sub" style="margin-top:12px">{{ 'settings.dev.empty' | t }}</p>
+      } @else {
+        <div style="max-height:320px;overflow-y:auto;margin:8px 0 6px">
+          @for (device of devices(); track device.id) {
+            <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--line)">
+              <span style="width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--glass);border:1px solid var(--line);flex-shrink:0">🖥️</span>
+              <div style="min-width:0;flex:1">
+                <b style="display:flex;align-items:center;gap:8px;font-family:var(--display);font-weight:600;font-size:13.5px">
+                  {{ device.deviceLabel || ('settings.common.unknownDevice' | t) }}
+                  @if (device.current) { <span style="font-size:10.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--accent,#34D399);background:var(--glass);border:1px solid var(--line);border-radius:999px;padding:1px 7px">{{ 'settings.dev.thisDevice' | t }}</span> }
+                </b>
+                <span style="font-size:12px;color:var(--ink-faint)">{{ device.ipAddress || ('settings.common.unknownIp' | t) }} · {{ 'settings.dev.lastActive' | t }} {{ formatWhen(device.lastSeenAt) }}</span>
+              </div>
+              @if (!device.current) {
+                <button class="btn btn-glass btn-sm" type="button" [disabled]="deviceBusy()" (click)="revokeDevice(device)">{{ deviceBusy() === device.id ? '…' : ('settings.dev.signout' | t) }}</button>
+              }
+            </div>
+          }
+        </div>
+      }
+      <div class="modal-acts">
+        @if (hasOtherDevices()) {
+          <button class="btn btn-danger btn-sm" type="button" [disabled]="deviceBusy()" (click)="revokeOtherDevices()">{{ deviceBusy() === 'others' ? ('settings.dev.signingOut' | t) : ('settings.dev.signoutOthers' | t) }}</button>
+        }
+        <button class="btn btn-glass btn-sm" type="button" (click)="closeDevices()">{{ 'settings.common.close' | t }}</button>
+      </div>
+    </div>
+  }
+</div>
+
+<!-- two-factor modal -->
+<div class="modal-scrim" [class.show]="tfaShow()" role="dialog" aria-modal="true" (click)="$event.target === $event.currentTarget && closeTwoFactor()">
+  @if (tfaShow()) {
+    <div class="modal" style="max-width:460px;text-align:left">
+      <h3>{{ 'settings.sec.twofa' | t }}</h3>
+      @if (tfaLoading()) {
+        <p class="dlg-sub">{{ 'settings.tfa.checking' | t }}</p>
+      } @else if (tfaSetup(); as sent) {
+        <!-- A code has been texted — enter it (same step for enabling and turning off). -->
+        <p class="dlg-sub">{{ 'settings.tfa.texted' | t: { phone: sent.phoneNumber, action: (tfaEnabled() ? ('settings.tfa.turnOff' | t) : ('settings.tfa.turnOn' | t)) } }}</p>
+        <div class="dlg-field" style="margin-top:12px">
+          <label>{{ 'settings.tfa.code' | t }}</label>
+          <input type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" [placeholder]="'settings.tfa.codePlaceholder' | t" autofocus [value]="tfaCode()" (input)="tfaCode.set(codeEl.value)" #codeEl>
+        </div>
+        @if (tfaError()) { <p class="dlg-err">{{ tfaError() }}</p> }
+        <div class="modal-acts">
+          <button class="btn btn-glass btn-sm" type="button" [disabled]="tfaBusy()" (click)="closeTwoFactor()">{{ 'settings.common.cancel' | t }}</button>
+          @if (tfaEnabled()) {
+            <button class="btn btn-danger btn-sm" type="button" [disabled]="tfaBusy()" (click)="confirmDisable(codeEl.value)">{{ tfaBusy() ? ('settings.tfa.turningOff' | t) : ('settings.tfa.turnOffBtn' | t) }}</button>
+          } @else {
+            <button class="btn btn-primary btn-sm" type="button" [disabled]="tfaBusy()" (click)="confirmEnable(codeEl.value)">{{ tfaBusy() ? ('settings.tfa.verifying' | t) : ('settings.tfa.enable' | t) }}</button>
+          }
+        </div>
+      } @else if (tfaEnabled()) {
+        <p class="dlg-sub">{{ 'settings.tfa.on' | t: { phone: (tfaEnrolledPhone() || ('settings.tfa.yourPhone' | t)) } }}</p>
+        @if (tfaError()) { <p class="dlg-err">{{ tfaError() }}</p> }
+        <div class="modal-acts">
+          <button class="btn btn-glass btn-sm" type="button" [disabled]="tfaBusy()" (click)="closeTwoFactor()">{{ 'settings.common.close' | t }}</button>
+          <button class="btn btn-danger btn-sm" type="button" [disabled]="tfaBusy()" (click)="startTwoFactorDisable()">{{ tfaBusy() ? ('settings.tfa.textingCode' | t) : ('settings.tfa.turnOffBtn' | t) }}</button>
+        </div>
+      } @else {
+        <p class="dlg-sub">{{ 'settings.tfa.setupDesc' | t }}</p>
+        <div class="dlg-field" style="margin-top:12px">
+          <label>{{ 'settings.tfa.phoneLabel' | t }}</label>
+          <input type="tel" inputmode="tel" autocomplete="tel" placeholder="+1 555 123 4567" [value]="tfaPhone()" (input)="tfaPhone.set(phoneEl.value)" #phoneEl>
+        </div>
+        @if (tfaError()) { <p class="dlg-err">{{ tfaError() }}</p> }
+        <div class="modal-acts">
+          <button class="btn btn-glass btn-sm" type="button" [disabled]="tfaBusy()" (click)="closeTwoFactor()">{{ 'settings.common.cancel' | t }}</button>
+          <button class="btn btn-primary btn-sm" type="button" [disabled]="tfaBusy()" (click)="startTwoFactorSetup(phoneEl.value)">{{ tfaBusy() ? ('settings.tfa.textingCode' | t) : ('settings.tfa.sendCode' | t) }}</button>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+<!-- toast -->
+<div class="toast" [class.show]="toastShow()" role="status" aria-live="polite">
+  <span class="ti"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+  <div><b>{{ toastTitle() }}</b><span>{{ toastSub() }}</span></div>
+</div>
+</div>

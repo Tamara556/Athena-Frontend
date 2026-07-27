@@ -1,0 +1,248 @@
+<div class="noise" aria-hidden="true"></div>
+
+<!-- shared SVG defs (logo mark) — identical to landing/login -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="athenaMark">
+      <mask id="starCut">
+        <rect x="0" y="0" width="120" height="120" fill="#fff"/>
+        <path d="M60 38 Q63.5 56.5 82 60 Q63.5 63.5 60 82 Q56.5 63.5 38 60 Q56.5 56.5 60 38 Z" fill="#000"/>
+      </mask>
+      <clipPath id="flowerClip">
+        <circle cx="60" cy="26" r="20"/><circle cx="89.4" cy="43" r="20"/><circle cx="89.4" cy="77" r="20"/>
+        <circle cx="60" cy="94" r="20"/><circle cx="30.6" cy="77" r="20"/><circle cx="30.6" cy="43" r="20"/>
+        <circle cx="60" cy="60" r="33"/>
+      </clipPath>
+      <g clip-path="url(#flowerClip)" mask="url(#starCut)">
+        <rect x="0" y="0" width="120" height="120" fill="#A855F7"/>
+        <g filter="url(#blobBlur)">
+          <circle cx="60" cy="16" r="30" fill="#8B5CF6"/>
+          <circle cx="98" cy="36" r="30" fill="#F472B6"/>
+          <circle cx="100" cy="80" r="30" fill="#FB923C"/>
+          <circle cx="62" cy="102" r="30" fill="#A3E635"/>
+          <circle cx="22" cy="82" r="30" fill="#2DD4BF"/>
+          <circle cx="18" cy="38" r="30" fill="#60A5FA"/>
+          <circle cx="44" cy="14" r="22" fill="#7C3AED"/>
+        </g>
+      </g>
+    </g>
+    <filter id="blobBlur"><feGaussianBlur stdDeviation="11"/></filter>
+  </defs>
+</svg>
+
+<main class="auth">
+
+  <!-- ============ registration form ============ -->
+  <section class="auth-form" aria-label="Create your account">
+    <div class="mesh" aria-hidden="true">
+      <div class="blob b1"></div><div class="blob b2"></div>
+    </div>
+
+    <div class="card">
+      <a class="mobile-brand brand" routerLink="/" aria-label="Athena home">
+        <svg viewBox="0 0 120 120" width="32" height="32"><use href="#athenaMark"/></svg>
+        <span class="wordmark">athen<em>a</em></span>
+      </a>
+
+      <h2>Create your account</h2>
+      <p class="sub">Start your personalized learning journey with Athena.</p>
+
+      <div class="alert error" [class.show]="errorShown()" role="alert">
+        <svg class="a-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+        <span>{{ errorText() }}</span>
+      </div>
+      <div class="alert success" [class.show]="successShown()" role="status">
+        <svg class="a-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        <span>Account created. Setting up your first roadmap…</span>
+      </div>
+
+      <form class="form" novalidate (submit)="$event.preventDefault(); onSubmit()">
+        <!-- profile picture (optional) -->
+        <div class="avatar-field">
+          <div class="avatar-preview" [class.has-img]="imagePreview()" aria-hidden="true">
+            @if (imagePreview()) {
+              <img [src]="imagePreview()" alt="">
+            } @else {
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            }
+          </div>
+          <div class="avatar-body">
+            <span class="avatar-title">Profile picture <span class="optional">(optional)</span></span>
+            <span class="avatar-hint">PNG, JPEG, JPG or GIF · up to 5 MB</span>
+            <div class="avatar-actions">
+              <label class="btn btn-glass avatar-btn" for="image">
+                {{ imageFile() ? 'Change photo' : 'Upload photo' }}
+                <input type="file" id="image" accept="image/png,image/jpeg,image/jpg,image/gif" hidden (change)="onImageChange($event)">
+              </label>
+              @if (imageFile()) {
+                <button type="button" class="avatar-remove" (click)="removeImage()">Remove</button>
+              }
+            </div>
+          </div>
+        </div>
+        <div class="field-msg" [class.show]="imageError() !== ''">{{ imageError() }}</div>
+
+        <!-- name row -->
+        <div class="name-row">
+          <div class="fl" [class.valid]="firstState() === 'valid'" [class.invalid]="firstState() === 'invalid'">
+            <label for="firstName">First name</label>
+            <div class="input-wrap">
+              <span class="lead" aria-hidden="true">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </span>
+              <input type="text" id="firstName" placeholder="Ada" autocomplete="given-name" required
+                     [attr.aria-invalid]="firstState() === 'invalid'"
+                     (input)="onFirstInput($event)" (blur)="vName('first', firstName())">
+            </div>
+          </div>
+          <div class="fl" [class.valid]="lastState() === 'valid'" [class.invalid]="lastState() === 'invalid'">
+            <label for="lastName">Last name</label>
+            <div class="input-wrap">
+              <span class="lead" aria-hidden="true">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </span>
+              <input type="text" id="lastName" placeholder="Lovelace" autocomplete="family-name" required
+                     [attr.aria-invalid]="lastState() === 'invalid'"
+                     (input)="onLastInput($event)" (blur)="vName('last', lastName())">
+            </div>
+          </div>
+        </div>
+
+        <!-- email -->
+        <div>
+          <div class="fl has-state" [class.valid]="emailState() === 'valid'" [class.invalid]="emailState() === 'invalid'">
+            <label for="email">Email</label>
+            <div class="input-wrap">
+              <span class="lead" aria-hidden="true">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+              </span>
+              <input type="email" id="email" placeholder="you@example.com" autocomplete="email" required aria-describedby="emailMsg"
+                     [attr.aria-invalid]="emailState() === 'invalid'"
+                     (input)="onEmailInput($event)" (blur)="vEmail(email())">
+              <span class="trail" aria-hidden="true">
+                <span class="state-ico ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+              </span>
+            </div>
+          </div>
+          <div class="field-msg" id="emailMsg" [class.show]="emailMsgShow()">Enter a valid email address.</div>
+        </div>
+
+        <!-- username with availability -->
+        <div>
+          <div class="fl has-state" [class.valid]="userState() === 'valid'" [class.invalid]="userState() === 'invalid'">
+            <label for="username">Username</label>
+            <div class="input-wrap">
+              <span class="lead" aria-hidden="true">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"/></svg>
+              </span>
+              <input type="text" id="username" placeholder="ada_lovelace" autocomplete="username" required aria-describedby="unameNote"
+                     [attr.aria-invalid]="userState() === 'invalid'"
+                     (input)="onUserInput($event)">
+            </div>
+          </div>
+          <div class="uname-note" aria-live="polite"
+               [class.show]="unameKind() !== ''"
+               [class.checking]="unameKind() === 'checking'"
+               [class.free]="unameKind() === 'free'"
+               [class.taken]="unameKind() === 'taken'">
+            @if (unameKind() === 'checking') {
+              <span class="uname-spin" aria-hidden="true"></span>
+            } @else {
+              <span class="dot" aria-hidden="true"></span>
+            }
+            <span>{{ unameText() }}</span>
+          </div>
+        </div>
+
+        <!-- password -->
+        <div>
+          <div class="fl has-toggle" [class.valid]="pwState() === 'valid'" [class.invalid]="pwState() === 'invalid'">
+            <label for="password">Password</label>
+            <div class="input-wrap">
+              <span class="lead" aria-hidden="true">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+              </span>
+              <input [type]="pwVisible() ? 'text' : 'password'" id="password" placeholder="Create a password" autocomplete="new-password" required aria-describedby="pwReqs"
+                     (input)="onPwInput($event)">
+              <span class="trail">
+                <button type="button" class="toggle" [attr.aria-pressed]="pwVisible()" [attr.aria-label]="pwVisible() ? 'Hide password' : 'Show password'" (click)="togglePw()">
+                  @if (pwVisible()) {
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 5.09A10.4 10.4 0 0 1 12 5c6.5 0 10 7 10 7a18.5 18.5 0 0 1-2.16 3.19M6.06 6.06A18.4 18.4 0 0 0 2 12s3.5 7 10 7a10.4 10.4 0 0 0 4.94-1.06"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/><path d="M3 3l18 18"/></svg>
+                  } @else {
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                  }
+                </button>
+              </span>
+            </div>
+          </div>
+          <div class="pw-extra">
+            <div class="pw-meter" [attr.data-score]="pwScore()" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+            <ul class="pw-reqs" id="pwReqs">
+              <li [class.ok]="pwRules().len"><span class="r-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>8+ characters</li>
+              <li [class.ok]="pwRules().upper"><span class="r-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>Uppercase letter</li>
+              <li [class.ok]="pwRules().lower"><span class="r-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>Lowercase letter</li>
+              <li [class.ok]="pwRules().num"><span class="r-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>Number</li>
+              <li [class.ok]="pwRules().special"><span class="r-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>Special character</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- confirm password -->
+        <div>
+          <div class="fl has-toggle has-state" [class.valid]="confirmState() === 'valid'" [class.invalid]="confirmState() === 'invalid'">
+            <label for="confirm">Confirm password</label>
+            <div class="input-wrap">
+              <span class="lead" aria-hidden="true">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+              </span>
+              <input [type]="pwVisible() ? 'text' : 'password'" id="confirm" placeholder="Re-enter your password" autocomplete="new-password" required aria-describedby="confirmMsg"
+                     [attr.aria-invalid]="confirmState() === 'invalid'"
+                     (input)="onConfirmInput($event)" (blur)="vConfirm(confirm())">
+              <span class="trail">
+                <span class="state-ico ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+                <span class="state-ico bad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></span>
+              </span>
+            </div>
+          </div>
+          <div class="field-msg" id="confirmMsg" [class.show]="confirmMsgShow()">Passwords don't match.</div>
+        </div>
+
+        <!-- terms -->
+        <label class="terms" [class.invalid]="termsInvalid()">
+          <input type="checkbox" id="terms" required (change)="onTerms($event)">
+          <span class="box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+          <span>I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></span>
+        </label>
+
+        <button type="submit" class="btn btn-primary submit" [class.loading]="loading()">
+          <span class="spinner" aria-hidden="true"></span>
+          <span class="label">{{ submitLabel() }}</span>
+          <span class="arrow" aria-hidden="true">→</span>
+        </button>
+      </form>
+
+      <div class="divider"><span>or</span></div>
+
+      <div class="socials">
+        <button type="button" class="btn btn-glass social" [style.pointer-events]="googleLoading() ? 'none' : null" (click)="social('google')">
+          @if (googleLoading()) {
+            <span class="spinner" style="border-color:rgba(21,21,31,.2);border-top-color:var(--violet)"></span> Connecting to Google…
+          } @else {
+            <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5Z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65Z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19Z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48Z"/></svg>
+            Google
+          }
+        </button>
+        <button type="button" class="btn btn-glass social" [style.pointer-events]="githubLoading() ? 'none' : null" (click)="social('github')">
+          @if (githubLoading()) {
+            <span class="spinner" style="border-color:rgba(21,21,31,.2);border-top-color:var(--violet)"></span> Connecting to GitHub…
+          } @else {
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.78 1.2 1.78 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.4-5.25 5.68.41.36.78 1.07.78 2.16v3.2c0 .31.21.68.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z"/></svg>
+            GitHub
+          }
+        </button>
+      </div>
+
+      <p class="switch">Already have an account? <a routerLink="/login">Sign In</a></p>
+    </div>
+  </section>
+</main>

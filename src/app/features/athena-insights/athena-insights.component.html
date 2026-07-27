@@ -1,0 +1,164 @@
+<div class="ai-root">
+<div class="noise" aria-hidden="true"></div>
+<div class="page-mesh" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+
+<app-sidebar>
+  <main class="main">
+    <header class="topbar" [class.scrolled]="scrolled()">
+      <button class="hamburger" type="button" aria-label="Open menu" (click)="openDrawer()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+      <div class="crumb"><span class="root">Athena</span><span class="sep">›</span><b>{{ 'insights.title' | t }}</b></div>
+      <div class="topbar-spacer"></div>
+      <label class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input type="text" [placeholder]="'profile.search' | t" aria-label="Search"><kbd>⌘K</kbd></label>
+      <app-lang-select></app-lang-select><app-theme-toggle></app-theme-toggle><button class="icon-btn" type="button" aria-label="Notifications"><span class="dot"></span><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg></button>
+    </header>
+
+    <div class="in-page">
+
+      <!-- HERO -->
+      <section class="in-hero reveal">
+        <span class="eyebrow">{{ 'insights.hero.eyebrow' | t }}</span>
+        <h1><span class="grad-text">{{ 'insights.title' | t }}</span></h1>
+        <p class="sub">{{ 'insights.hero.sub' | t }}</p>
+        <p class="supp">{{ 'insights.hero.supp' | t }}</p>
+      </section>
+
+      @if (emptyState()) {
+        <!-- EMPTY STATE -->
+        <section class="empty show" aria-live="polite">
+          <div class="empty-emblem" aria-hidden="true"><svg viewBox="0 0 120 120"><use href="#athenaMark"/></svg></div>
+          <h2>{{ 'insights.empty.title' | t }}</h2>
+          <p>{{ 'insights.empty.body1' | t }}</p>
+          <p>{{ 'insights.empty.body2' | t }}</p>
+          <div class="empty-foot"><button class="btn btn-glass btn-sm" type="button" (click)="showEmpty.set(false)">{{ 'insights.empty.back' | t }}</button></div>
+        </section>
+      } @else {
+
+      @let p = profile();
+
+      <!-- ATHENA'S LETTER (centerpiece) -->
+      <section class="letter reveal" aria-labelledby="letter-title">
+        <div class="letter-head">
+          <svg class="letter-seal" viewBox="0 0 120 120" aria-hidden="true"><use href="#athenaMark"/></svg>
+          <div>
+            <div class="lt">{{ p?.letter?.eyebrow }}</div>
+            <h2 id="letter-title">{{ 'insights.letter.dear' | t: { name: greetingName() } }}</h2>
+          </div>
+          @if (p?.letter?.dateLabel; as d) { <div class="ldate">{{ 'insights.letter.writtenToday' | t }}<br>{{ d }}</div> }
+        </div>
+        <div class="letter-body">
+          @for (para of p?.letter?.paragraphs ?? []; track $index) {
+            <p [class.lead]="para.lead"><app-insight-text [segments]="para.segments"/></p>
+          }
+        </div>
+        <div class="signature">
+          <svg viewBox="0 0 120 120" aria-hidden="true"><use href="#athenaMark"/></svg>
+          <div class="sg"><b>— Athena</b><span>{{ p?.letter?.signTagline }}</span></div>
+        </div>
+        <!-- letter skeleton -->
+        <div class="letter-skel" [class.hide]="loaded()" aria-hidden="true">
+          <div class="note"><span class="pen"></span> {{ 'insights.reflecting' | t }}</div>
+          <div class="sk" style="width:92%"></div><div class="sk" style="width:84%"></div><div class="sk" style="width:88%"></div><div class="sk" style="width:60%"></div>
+        </div>
+      </section>
+
+      <!-- LEARNING STYLE -->
+      <section class="section reveal">
+        <div class="section-head"><h2>{{ 'insights.style.title' | t }}</h2><p>{{ 'insights.style.sub' | t }}</p></div>
+        <div class="learn">
+          <div class="learn-col best">
+            <h3><span class="lh" style="background:linear-gradient(135deg,#34D399,#22D3EE)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> {{ 'insights.style.best' | t }}</h3>
+            @for (item of p?.learningStyle?.best ?? []; track $index) {
+              <div class="learn-item"><span class="li">{{ item.emoji }}</span> {{ item.text }}</div>
+            }
+          </div>
+          <div class="learn-col hard">
+            <h3><span class="lh" style="background:rgba(21,21,31,.1);color:var(--ink-soft)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v5M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg></span> {{ 'insights.style.harder' | t }}</h3>
+            @for (item of p?.learningStyle?.harder ?? []; track $index) {
+              <div class="learn-item"><span class="li">{{ item.emoji }}</span> {{ item.text }}</div>
+            }
+          </div>
+        </div>
+      </section>
+
+      <!-- PATTERNS -->
+      <section class="section reveal">
+        <div class="section-head"><h2>{{ 'insights.patterns.title' | t }}</h2><p>{{ 'insights.patterns.sub' | t }}</p></div>
+        <div class="patterns">
+          @for (pat of p?.patterns ?? []; track $index) {
+            <div class="pat"><span class="pm">{{ pat.emoji }}</span><p>{{ pat.text }}</p></div>
+          }
+        </div>
+      </section>
+
+      <!-- STRENGTHS -->
+      <section class="section reveal">
+        <div class="section-head"><h2>{{ 'insights.strengths.title' | t }}</h2><p>{{ 'insights.strengths.sub' | t }}</p></div>
+        <div class="str-grid">
+          @for (s of p?.strengths ?? []; track $index) {
+            <div class="str"><div class="si" [style.background]="s.gradient">{{ s.icon }}</div><h4>{{ s.title }}</h4><p>{{ s.text }}</p></div>
+          }
+        </div>
+      </section>
+
+      <!-- AREAS WORTH EXPLORING -->
+      <section class="section reveal">
+        <div class="section-head"><h2>{{ 'insights.explore.title' | t }}</h2><p>{{ 'insights.explore.sub' | t }}</p></div>
+        <div class="explore">
+          @for (e of p?.explorations ?? []; track $index) {
+            <div class="exp"><div class="ei">{{ e.emoji }}</div><p><app-insight-text [segments]="e.segments"/></p></div>
+          }
+        </div>
+      </section>
+
+      <!-- WHO YOU'VE BECOME -->
+      <section class="section reveal">
+        <div class="section-head"><h2>{{ 'insights.evolution.title' | t }}</h2></div>
+        <div class="evo">
+          <svg class="em" viewBox="0 0 120 120" aria-hidden="true"><use href="#athenaMark"/></svg>
+          <p>@if (p?.evolution; as ev) {<app-insight-text [segments]="ev.segments"/>}</p>
+        </div>
+      </section>
+
+      <!-- POTENTIAL -->
+      <section class="section reveal">
+        <div class="section-head"><h2>{{ 'insights.potential.title' | t }}</h2><p>{{ 'insights.potential.sub' | t }}</p></div>
+        <div class="pot-grid">
+          @for (pt of p?.potential ?? []; track $index) {
+            <div class="pot"><span class="pi" [style.background]="pt.gradient">{{ pt.icon }}</span><div><h4>{{ pt.title }}</h4><p>{{ pt.text }}</p></div></div>
+          }
+        </div>
+      </section>
+
+      <!-- FUTURE LETTER -->
+      <section class="section reveal">
+        <div class="letter warm" aria-labelledby="future-title">
+          <div class="letter-head">
+            <svg class="letter-seal" viewBox="0 0 120 120" aria-hidden="true"><use href="#athenaMark"/></svg>
+            <div>
+              <div class="lt">{{ p?.futureLetter?.eyebrow }}</div>
+              <h2 id="future-title">{{ p?.futureLetter?.title }}</h2>
+            </div>
+          </div>
+          <div class="letter-body">
+            @for (para of p?.futureLetter?.paragraphs ?? []; track $index) {
+              <p [class.lead]="para.lead"><app-insight-text [segments]="para.segments"/></p>
+            }
+          </div>
+          <div class="signature">
+            <svg viewBox="0 0 120 120" aria-hidden="true"><use href="#athenaMark"/></svg>
+            <div class="sg"><b>— Athena</b><span>{{ p?.futureLetter?.signTagline }}</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- preview empty state -->
+      <div class="preview-toggle">
+        <button class="btn-ghost" type="button" (click)="showEmpty.set(true)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg> {{ 'insights.previewEmpty' | t }}</button>
+      </div>
+
+      }
+
+    </div>
+  </main>
+</app-sidebar>
+</div>

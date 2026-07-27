@@ -1,0 +1,95 @@
+<!-- Athena logo mark (shared SVG def) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="blobBlur"><feGaussianBlur stdDeviation="11"/></filter>
+    <g id="athenaMark">
+      <clipPath id="flowerClip"><circle cx="60" cy="26" r="20"/><circle cx="89.4" cy="43" r="20"/><circle cx="89.4" cy="77" r="20"/><circle cx="60" cy="94" r="20"/><circle cx="30.6" cy="77" r="20"/><circle cx="30.6" cy="43" r="20"/><circle cx="60" cy="60" r="33"/></clipPath>
+      <mask id="starCut"><rect x="0" y="0" width="120" height="120" fill="#fff"/><path d="M60 38 Q63.5 56.5 82 60 Q63.5 63.5 60 82 Q56.5 63.5 38 60 Q56.5 56.5 60 38 Z" fill="#000"/></mask>
+      <g clip-path="url(#flowerClip)" mask="url(#starCut)">
+        <rect x="0" y="0" width="120" height="120" fill="#A855F7"/>
+        <g filter="url(#blobBlur)"><circle cx="60" cy="16" r="30" fill="#8B5CF6"/><circle cx="98" cy="36" r="30" fill="#F472B6"/><circle cx="100" cy="80" r="30" fill="#FB923C"/><circle cx="62" cy="102" r="30" fill="#A3E635"/><circle cx="22" cy="82" r="30" fill="#2DD4BF"/><circle cx="18" cy="38" r="30" fill="#60A5FA"/><circle cx="44" cy="14" r="22" fill="#7C3AED"/></g>
+      </g>
+    </g>
+  </defs>
+</svg>
+
+<div class="app" [class.collapsed]="collapsed()" [class.force-expanded]="forceExpanded()" [class.drawer-open]="drawerOpen()">
+  <div class="scrim" aria-hidden="true" (click)="closeDrawer()"></div>
+
+  <!-- ================= SIDEBAR ================= -->
+  <aside class="sidebar" aria-label="Primary">
+    <button class="side-brand" (click)="toggle()" aria-label="Toggle sidebar" [attr.aria-expanded]="!collapsed()">
+      <svg class="mark" viewBox="0 0 120 120" aria-hidden="true"><use href="#athenaMark"/></svg>
+      <span class="side-wordmark">athen<em>a</em></span>
+      <span class="brand-toggle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></span>
+    </button>
+
+    <nav class="side-scroll">
+      <div class="side-section">{{ 'nav.section.learning' | t }}</div>
+      <a class="nav-item" data-tour="nav-roadmap" routerLink="/roadmap" routerLinkActive="active" (click)="onNavigate()">
+        <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 0 0 1 1h3m10-11l2 2m-2-2v10a1 1 0 0 1-1 1h-3m-6 0a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1m-6 0h6"/></svg></span>
+        <span class="lbl">{{ 'nav.roadmap' | t }}</span><span class="tip">{{ 'nav.roadmap' | t }}</span>
+      </a>
+      <a class="nav-item" data-tour="nav-daily-journey" routerLink="/daily-journey" routerLinkActive="active" (click)="onNavigate()">
+        <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>
+        <span class="lbl">{{ 'nav.dailyJourney' | t }}</span><span class="badge">2</span><span class="tip">{{ 'nav.dailyJourney' | t }}</span>
+      </a>
+      <a class="nav-item" data-tour="nav-knowledge-graph" routerLink="/knowledge-graph" routerLinkActive="active" (click)="onNavigate()">
+        <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2.4"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="7" r="2"/><circle cx="18" cy="18" r="2"/><circle cx="6" cy="18" r="2"/><path d="M10.2 10.6 6.5 7.2M13.7 11l3.5-2.6M13.6 13.5l3.2 3M10.4 13.6l-3 3"/></svg></span>
+        <span class="lbl">{{ 'nav.knowledgeGraph' | t }}</span><span class="tip">{{ 'nav.knowledgeGraph' | t }}</span>
+      </a>
+      <a class="nav-item" data-tour="nav-interviews" routerLink="/interviews" routerLinkActive="active" (click)="onNavigate()">
+        <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v4M8 21h8"/></svg></span>
+        <span class="lbl">{{ 'nav.interviews' | t }}</span><span class="tip">{{ 'nav.interviews' | t }}</span>
+      </a>
+
+      <div class="side-section">{{ 'nav.section.progress' | t }}</div>
+      <a class="nav-item" data-tour="nav-progress" routerLink="/achievements" routerLinkActive="active" (click)="onNavigate()">
+        <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4zM7 6H4v2a3 3 0 0 0 3 3M17 6h3v2a3 3 0 0 1-3 3"/></svg></span>
+        <span class="lbl">{{ 'nav.achievements' | t }}</span><span class="tip">{{ 'nav.achievements' | t }}</span>
+      </a>
+      <a class="nav-item" routerLink="/streaks" routerLinkActive="active" (click)="onNavigate()">
+        <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1 3-1 4-1 6 0 1 1 2 2 2 2 0 2-2 2-2 2 2 3 4 3 7a6 6 0 0 1-12 0c0-4 3-6 4-9 .8 2 2 2.5 2 2-1-2 0-4 0-6z"/></svg></span>
+        <span class="lbl">{{ 'nav.streaks' | t }}</span>@if (currentStreak() > 0) {<span class="flame-badge">🔥 {{ currentStreak() }}</span>}<span class="tip">{{ 'nav.streaks' | t }}@if (currentStreak() > 0) { · {{ currentStreak() }} {{ (currentStreak() === 1 ? 'side.day' : 'side.days') | t }}}</span>
+      </a>
+      <a class="nav-item" routerLink="/progress" routerLinkActive="active" (click)="onNavigate()">
+        <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18M7 15l3.5-4 3 2.5L21 7"/></svg></span>
+        <span class="lbl">{{ 'nav.progress' | t }}</span><span class="tip">{{ 'nav.progress' | t }}</span>
+      </a>
+      <a class="nav-item" routerLink="/athena-insights" routerLinkActive="active" (click)="onNavigate()">
+        <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="13" rx="3"/><path d="M9 7V5a3 3 0 0 1 6 0v2M9 13h.01M15 13h.01M12 3V1"/></svg></span>
+        <span class="lbl">{{ 'nav.insights' | t }}</span><span class="tip">{{ 'nav.insights' | t }}</span>
+      </a>
+
+      <div class="side-section">{{ 'nav.section.account' | t }}</div>
+      <a class="nav-item" routerLink="/profile" routerLinkActive="active" (click)="onNavigate()">
+        <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>
+        <span class="lbl">{{ 'nav.profile' | t }}</span><span class="tip">{{ 'nav.profile' | t }}</span>
+      </a>
+      <a class="nav-item" data-tour="nav-settings" routerLink="/settings" routerLinkActive="active" (click)="onNavigate()">
+        <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7.6 1.6 1.6 0 0 0-1 1.5V22a2 2 0 0 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0-.6-2.7 1.6 1.6 0 0 0-1.5-1H2a2 2 0 0 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H8a1.6 1.6 0 0 0 1-1.5V2a2 2 0 0 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V8a1.6 1.6 0 0 0 1.5 1H22a2 2 0 0 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg></span>
+        <span class="lbl">{{ 'nav.settings' | t }}</span><span class="tip">{{ 'nav.settings' | t }}</span>
+      </a>
+    </nav>
+
+    <div class="side-foot">
+      <div class="side-user" tabindex="0">
+        <span class="side-ava">
+          @if (avatar()) {
+            <img [src]="avatar()" alt="" referrerpolicy="no-referrer">
+          } @else {
+            {{ initials() }}
+          }
+        </span>
+        <span class="who"><b>{{ displayName() }}</b><span>{{ 'side.learner' | t }}</span></span>
+      </div>
+      <button class="nav-item logout" (click)="logout()">
+        <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg></span>
+        <span class="lbl">{{ 'side.logout' | t }}</span><span class="tip">{{ 'side.logout' | t }}</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ================= PAGE CONTENT ================= -->
+  <ng-content></ng-content>
+</div>

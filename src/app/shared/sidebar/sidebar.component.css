@@ -1,0 +1,97 @@
+/* ============================================================
+   SIDEBAR — 1:1 with the source design. The component renders the
+   .app shell and projects page content; collapse/drawer state is a
+   class on .app, exactly like the original. Design tokens are global.
+   ============================================================ */
+:host{ display:block; }
+
+.app{
+  --sidebar-w:264px;
+  --sidebar-w-collapsed:86px;
+  display:flex;min-height:100dvh;position:relative;
+}
+
+/* ============================================================
+   SIDEBAR
+   ============================================================ */
+.sidebar{position:sticky;top:0;align-self:flex-start;width:var(--sidebar-w);height:100dvh;flex-shrink:0;z-index:120;display:flex;flex-direction:column;padding:18px 14px;background:rgba(255,255,255,.66);backdrop-filter:blur(26px) saturate(1.6);-webkit-backdrop-filter:blur(26px) saturate(1.6);border-right:1px solid rgba(255,255,255,.7);box-shadow:1px 0 0 rgba(21,21,31,.03), 18px 0 50px rgba(21,21,31,.035);transition:width .3s cubic-bezier(.2,.8,.2,1);overflow:hidden}
+.app.collapsed .sidebar{width:var(--sidebar-w-collapsed)}
+
+/* brand / logo = toggle */
+.side-brand{display:flex;align-items:center;gap:12px;width:100%;background:none;border:none;cursor:pointer;padding:8px 8px;border-radius:16px;transition:background .25s;margin-bottom:8px}
+.side-brand:hover{background:rgba(21,21,31,.04)}
+.side-brand svg.mark{width:38px;height:38px;flex-shrink:0;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.side-brand:hover svg.mark{transform:rotate(-8deg) scale(1.05)}
+.side-wordmark{font-family:var(--display);font-weight:600;font-size:20px;letter-spacing:.05em;color:var(--ink);white-space:nowrap;opacity:1;transition:opacity .2s}
+.side-wordmark em{font-style:normal;background:linear-gradient(120deg,var(--violet),var(--pink));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.brand-toggle{margin-left:auto;width:26px;height:26px;border-radius:8px;flex-shrink:0;display:grid;place-items:center;color:var(--ink-faint);background:rgba(21,21,31,.04);transition:transform .3s,color .2s}
+.side-brand:hover .brand-toggle{color:var(--ink)}
+.app.collapsed .brand-toggle{transform:rotate(180deg)}
+.app.collapsed .side-wordmark,.app.collapsed .brand-toggle{opacity:0;pointer-events:none}
+
+/* nav */
+.side-scroll{flex:1;display:flex;flex-direction:column;gap:3px;margin-top:10px;overflow-y:auto;overflow-x:hidden;padding:2px}
+.side-scroll::-webkit-scrollbar{width:0}
+.side-section{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint);padding:14px 14px 6px;white-space:nowrap;transition:opacity .2s}
+.app.collapsed .side-section{opacity:0;height:14px;padding-top:8px;padding-bottom:0}
+.nav-item{display:flex;align-items:center;gap:14px;padding:11px 13px;border-radius:14px;color:var(--ink-soft);font-weight:500;font-size:14.5px;position:relative;white-space:nowrap;cursor:pointer;border:1px solid transparent;transition:background .2s,color .2s,box-shadow .25s,transform .2s;text-decoration:none}
+.nav-item .ico{width:22px;height:22px;flex-shrink:0;display:grid;place-items:center;color:var(--ink-faint);transition:color .2s,transform .25s}
+.nav-item .lbl{transition:opacity .2s}
+.nav-item .badge{margin-left:auto;font-family:var(--mono);font-size:10px;font-weight:500;color:#fff;background:linear-gradient(120deg,var(--violet),var(--pink));padding:2px 8px;border-radius:100px;box-shadow:0 4px 10px rgba(139,92,246,.3);transition:opacity .2s}
+.nav-item .flame-badge{margin-left:auto;font-size:12px;display:inline-flex;align-items:center;gap:3px;font-family:var(--mono);color:var(--amber);font-weight:500;transition:opacity .2s}
+.nav-item:hover{background:rgba(21,21,31,.045);color:var(--ink);transform:translateX(2px)}
+.nav-item:hover .ico{color:var(--violet);transform:scale(1.08)}
+.nav-item.active{background:linear-gradient(110deg,rgba(139,92,246,.13),rgba(34,211,238,.1));color:var(--ink);border-color:rgba(139,92,246,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.7), 0 6px 18px rgba(139,92,246,.12)}
+.nav-item.active .ico{color:var(--violet)}
+.nav-item.active::before{content:"";position:absolute;left:-14px;top:50%;transform:translateY(-50%);width:4px;height:24px;border-radius:0 4px 4px 0;background:linear-gradient(180deg,var(--violet),var(--aqua))}
+.app.collapsed .nav-item{justify-content:center;gap:0;padding:12px}
+.app.collapsed .nav-item .lbl,.app.collapsed .nav-item .badge,.app.collapsed .nav-item .flame-badge{opacity:0;width:0;overflow:hidden;pointer-events:none}
+.app.collapsed .nav-item.active::before{left:-12px}
+
+/* tooltip when collapsed */
+.nav-item .tip{position:absolute;left:calc(100% + 14px);top:50%;transform:translateY(-50%) scale(.9);background:var(--ink);color:#fff;font-size:12.5px;font-weight:500;padding:7px 12px;border-radius:10px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:200;box-shadow:var(--shadow-md);font-family:var(--body)}
+.nav-item .tip::before{content:"";position:absolute;left:-5px;top:50%;transform:translateY(-50%) rotate(45deg);width:9px;height:9px;background:var(--ink)}
+.app.collapsed .nav-item:hover .tip{opacity:1;transform:translateY(-50%) scale(1)}
+
+/* footer / user / logout */
+.side-foot{margin-top:8px;padding-top:12px;border-top:1px solid var(--line)}
+.side-user{display:flex;align-items:center;gap:12px;padding:9px 10px;border-radius:14px;cursor:pointer;transition:background .2s;white-space:nowrap}
+.side-user:hover{background:rgba(21,21,31,.045)}
+.side-ava{width:38px;height:38px;border-radius:12px;flex-shrink:0;display:grid;place-items:center;overflow:hidden;color:#fff;font-family:var(--display);font-weight:700;font-size:15px;background:linear-gradient(135deg,var(--violet),var(--pink));box-shadow:0 6px 16px rgba(139,92,246,.3)}
+.side-ava img{width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block}
+.side-user .who{transition:opacity .2s;min-width:0}
+.side-user .who b{display:block;font-size:13.5px;font-family:var(--display);font-weight:600;line-height:1.2}
+.side-user .who span{font-size:11.5px;color:var(--ink-faint)}
+.app.collapsed .side-user{justify-content:center}
+.app.collapsed .side-user .who{opacity:0;width:0;overflow:hidden}
+.nav-item.logout{color:var(--ink-soft);margin-top:4px;background:none;border:none;width:100%;text-align:left;font-family:var(--body)}
+.nav-item.logout:hover{background:rgba(251,113,133,.1);color:var(--red)}
+.nav-item.logout:hover .ico{color:var(--red)}
+
+/* mobile drawer scrim */
+.scrim{position:fixed;inset:0;background:rgba(21,21,31,.34);backdrop-filter:blur(3px);z-index:115;opacity:0;pointer-events:none;transition:opacity .3s}
+.app.drawer-open .scrim{opacity:1;pointer-events:auto}
+
+/* Tablet — sidebar auto-collapses to the icon rail unless the user expands it */
+@media (min-width:761px) and (max-width:1024px){
+  .app:not(.force-expanded) .sidebar{width:var(--sidebar-w-collapsed)}
+  .app:not(.force-expanded) .side-wordmark,
+  .app:not(.force-expanded) .brand-toggle,
+  .app:not(.force-expanded) .side-section,
+  .app:not(.force-expanded) .nav-item .lbl,
+  .app:not(.force-expanded) .nav-item .badge,
+  .app:not(.force-expanded) .nav-item .flame-badge,
+  .app:not(.force-expanded) .side-user .who{opacity:0;width:0;overflow:hidden;pointer-events:none}
+  .app:not(.force-expanded) .nav-item{justify-content:center;gap:0;padding:12px}
+  .app:not(.force-expanded) .side-user{justify-content:center}
+  .app:not(.force-expanded) .nav-item:hover .tip{opacity:1;transform:translateY(-50%) scale(1)}
+}
+
+/* Mobile — sidebar becomes a drawer overlay */
+@media (max-width:760px){
+  .sidebar{position:fixed;left:0;top:0;height:100dvh;width:var(--sidebar-w) !important;transform:translateX(-104%);transition:transform .34s cubic-bezier(.2,.8,.2,1);box-shadow:var(--shadow-lg)}
+  .app.drawer-open .sidebar{transform:translateX(0)}
+  .sidebar .side-wordmark,.sidebar .brand-toggle,.sidebar .side-section,.sidebar .nav-item .lbl,.sidebar .nav-item .badge,.sidebar .nav-item .flame-badge,.sidebar .side-user .who{opacity:1 !important;width:auto !important}
+  .sidebar .nav-item{justify-content:flex-start !important;gap:14px !important;padding:11px 13px !important}
+  .sidebar .nav-item .tip{display:none}
+}

@@ -1,0 +1,442 @@
+<div class="noise" aria-hidden="true"></div>
+
+<!-- shared SVG defs -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8B5CF6"/><stop offset="1" stop-color="#22D3EE"/>
+    </linearGradient>
+    <linearGradient id="bigGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8B5CF6"/><stop offset=".55" stop-color="#F472B6"/><stop offset="1" stop-color="#22D3EE"/>
+    </linearGradient>
+    <linearGradient id="edgeGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#8B5CF6" stop-opacity=".5"/><stop offset="1" stop-color="#22D3EE" stop-opacity=".5"/>
+    </linearGradient>
+    <!-- Athena mark: aurora flower with star cutout -->
+    <g id="athenaMark">
+      <mask id="starCut">
+        <rect x="0" y="0" width="120" height="120" fill="#fff"/>
+        <path d="M60 38 Q63.5 56.5 82 60 Q63.5 63.5 60 82 Q56.5 63.5 38 60 Q56.5 56.5 60 38 Z" fill="#000"/>
+      </mask>
+      <clipPath id="flowerClip">
+        <circle cx="60" cy="26" r="20"/><circle cx="89.4" cy="43" r="20"/><circle cx="89.4" cy="77" r="20"/>
+        <circle cx="60" cy="94" r="20"/><circle cx="30.6" cy="77" r="20"/><circle cx="30.6" cy="43" r="20"/>
+        <circle cx="60" cy="60" r="33"/>
+      </clipPath>
+      <g clip-path="url(#flowerClip)" mask="url(#starCut)">
+        <rect x="0" y="0" width="120" height="120" fill="#A855F7"/>
+        <g filter="url(#blobBlur)">
+          <circle cx="60" cy="16" r="30" fill="#8B5CF6"/>
+          <circle cx="98" cy="36" r="30" fill="#F472B6"/>
+          <circle cx="100" cy="80" r="30" fill="#FB923C"/>
+          <circle cx="62" cy="102" r="30" fill="#A3E635"/>
+          <circle cx="22" cy="82" r="30" fill="#2DD4BF"/>
+          <circle cx="18" cy="38" r="30" fill="#60A5FA"/>
+          <circle cx="44" cy="14" r="22" fill="#7C3AED"/>
+        </g>
+      </g>
+    </g>
+    <filter id="blobBlur"><feGaussianBlur stdDeviation="11"/></filter>
+  </defs>
+</svg>
+
+<!-- ================= NAV ================= -->
+<nav id="nav" [class.scrolled]="scrolled()" [class.open]="menuOpen()">
+  <a class="brand" href="#top" aria-label="Athena home">
+    <svg viewBox="0 0 120 120"><use href="#athenaMark"/></svg>
+    <span class="wordmark">athen<em>a</em></span>
+  </a>
+  <ul class="nav-links" (click)="menuOpen.set(false)">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#interviews">AI Interviews</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+  </ul>
+  <div class="nav-actions">
+    <a class="nav-login" routerLink="/login">Log in</a>
+    <a class="btn btn-primary nav-cta" href="#start">Get Started</a>
+    <button class="nav-burger" aria-label="Open menu" id="burger" (click)="menuOpen.set(!menuOpen())"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="top">
+  <div class="mesh" aria-hidden="true">
+    <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+  </div>
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <div class="hero-pill reveal"><b>NEW</b> Athena 2.0 — adaptive engine, rebuilt</div>
+      <h1 class="reveal d1">Learn Anything.<br><span class="grad-text">Athena Builds The&nbsp;Path.</span></h1>
+      <p class="hero-sub reveal d2">An AI-powered learning operating system that creates personalized roadmaps, tracks your progress, adapts to your weaknesses, and guides you toward any goal.</p>
+      <div class="hero-ctas reveal d3">
+        <a class="btn btn-primary" href="#start">Start Learning <span aria-hidden="true">→</span></a>
+        <a class="btn btn-glass" href="#demo"><span class="play-dot">▶</span> Watch Demo</a>
+      </div>
+      <div class="hero-proof reveal d4">
+        <div class="avatars">
+          <span style="--c1:#8B5CF6;--c2:#F472B6"></span>
+          <span style="--c1:#06B6D4;--c2:#22D3EE"></span>
+          <span style="--c1:#F472B6;--c2:#FB923C"></span>
+          <span style="--c1:#A855F7;--c2:#22D3EE"></span>
+        </div>
+        Trusted by 48,000+ learners shipping real skills
+      </div>
+    </div>
+
+    <div class="hero-visual reveal d2">
+      <div class="float-card fc1"><span class="fc-ico">◈</span><div>AI Interview passed<small>Score 87% · +5 vs last week</small></div></div>
+      <div class="float-card fc2"><span class="fc-ico">↻</span><div>Roadmap adapted<small>Kafka practice moved up</small></div></div>
+      <div class="float-card fc3"><span class="fc-ico">✦</span><div>New skill unlocked<small>Spring Security</small></div></div>
+
+      <div class="dash">
+        <div class="dash-bar">
+          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="dash-url">athena.os / my-path</span>
+        </div>
+        <div class="dash-body">
+          <div class="dash-card">
+            <div class="dash-label">Personalized roadmap</div>
+            <div class="dash-title-row"><h4>Backend Engineer Path</h4><span class="dash-pct">64%</span></div>
+            <div class="prog"><i></i></div>
+            <div class="step done"><span class="mark">✓</span> Java Fundamentals <span class="tag">done</span></div>
+            <div class="step done"><span class="mark">✓</span> Spring Framework <span class="tag">done</span></div>
+            <div class="step live"><span class="mark">●</span> Microservices <span class="tag">in progress</span></div>
+            <div class="step lock"><span class="mark">○</span> Cloud &amp; DevOps <span class="tag">locked</span></div>
+          </div>
+          <div class="dash-side">
+            <div class="dash-card score-card">
+              <div style="position:relative">
+                <svg class="ring" viewBox="0 0 62 62"><circle class="track" cx="31" cy="31" r="26"/><circle class="val" cx="31" cy="31" r="26"/></svg>
+              </div>
+              <div><span class="score-num">87%</span><div class="score-sub">AI interview score</div></div>
+            </div>
+            <div class="dash-card">
+              <div class="streak">
+                <div><div class="dash-label" style="margin-bottom:4px">Streak</div><span class="streak-num">12 days</span></div>
+                <span class="flame">🔥</span>
+              </div>
+              <div class="mini-graph" aria-hidden="true">
+                <i style="height:40%"></i><i style="height:55%"></i><i style="height:48%"></i><i style="height:70%"></i><i style="height:62%"></i><i style="height:84%"></i><i style="height:100%"></i>
+              </div>
+            </div>
+          </div>
+          <div class="dash-card rec">
+            <span class="rec-ico"><svg width="16" height="16" viewBox="0 0 120 120"><use href="#athenaMark"/></svg></span>
+            <div><b>Athena recommends</b><span>Practice Kafka Consumers — 25 min focused drill</span></div>
+            <span class="tag">adaptive</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= LOGOS ================= -->
+<section class="logos" id="features">
+  <div class="wrap reveal">
+    <p>Teams learning with Athena</p>
+    <div class="logo-row">
+      <span>Northwind</span><span>Vektor Labs</span><span>Helio</span><span>Marble&nbsp;Co</span><span>Quanta</span><span>Driftline</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HOW IT WORKS ================= -->
+<section class="how" id="how">
+  <div class="wrap">
+    <div class="reveal" style="text-align:center;max-width:640px;margin:0 auto">
+      <span class="eyebrow" style="justify-content:center">The system</span>
+      <h2 class="section-title">How Athena Works</h2>
+      <p class="section-sub" style="margin-inline:auto">One goal in. A living, adaptive learning path out. Athena runs the loop so you only have to show up.</p>
+    </div>
+    <div class="how-grid">
+      <div class="how-line" aria-hidden="true"></div>
+      <div class="how-card glass reveal"><div class="how-num">01</div><h3>Describe Your Goal</h3><p>"Become a backend engineer." "Pass system design interviews." Plain language is enough — Athena does the rest.</p></div>
+      <div class="how-card glass reveal d1"><div class="how-num">02</div><h3>AI Assesses Your Skills</h3><p>A short adaptive diagnostic maps what you already know, where you're shaky, and how you learn best.</p></div>
+      <div class="how-card glass reveal d2"><div class="how-num">03</div><h3>Athena Creates Your Roadmap</h3><p>A phased, personalized path with milestones, projects, and checkpoints — sequenced for your starting point.</p></div>
+      <div class="how-card glass reveal d3"><div class="how-num">04</div><h3>Learn &amp; Adapt</h3><p>Every session, quiz, and interview feeds the engine. Your roadmap reshapes itself around your weaknesses.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ROADMAP ================= -->
+<section class="roadmap" id="roadmap">
+  <div class="wrap roadmap-grid">
+    <div class="reveal">
+      <span class="eyebrow">AI roadmap</span>
+      <h2 class="section-title">A path that knows where you're going</h2>
+      <p class="section-sub">Athena turns an ambition into an ordered, living plan — with completion tracking on every phase.</p>
+      <div class="goal-chip glass"><span class="fc-ico">◎</span> Goal · Become a Backend Engineer</div>
+      <ul class="feature-list">
+        <li><span class="tick">✓</span> Phases sequenced by prerequisite, not by playlist order</li>
+        <li><span class="tick">✓</span> Each skill carries a confidence score from your sessions</li>
+        <li><span class="tick">✓</span> Locked phases unlock as mastery is verified</li>
+      </ul>
+    </div>
+    <div class="vroad glass reveal d1">
+      <div class="vroad-goal">Active roadmap</div>
+      <div class="vroad-title">Become a Backend Engineer</div>
+      <div class="phase done">
+        <span class="ph-dot">✓</span>
+        <div class="ph-body">
+          <div class="ph-tag">Phase 1 · complete</div>
+          <div class="ph-name">Java <span class="pct">100%</span></div>
+          <div class="ph-skills"><span>OOP</span><span>Collections</span><span>Streams</span><span>Concurrency</span></div>
+          <div class="ph-prog"><i></i></div>
+        </div>
+      </div>
+      <div class="phase done">
+        <span class="ph-dot">✓</span>
+        <div class="ph-body">
+          <div class="ph-tag">Phase 2 · complete</div>
+          <div class="ph-name">Spring <span class="pct">100%</span></div>
+          <div class="ph-skills"><span>Boot</span><span>Data JPA</span><span>Security</span></div>
+          <div class="ph-prog"><i></i></div>
+        </div>
+      </div>
+      <div class="phase live">
+        <span class="ph-dot">●</span>
+        <div class="ph-body">
+          <div class="ph-tag">Phase 3 · in progress</div>
+          <div class="ph-name">Microservices <span class="pct">45%</span></div>
+          <div class="ph-skills"><span>Docker</span><span>Kafka</span><span>gRPC</span></div>
+          <div class="ph-prog"><i></i></div>
+        </div>
+      </div>
+      <div class="phase lock">
+        <span class="ph-dot">○</span>
+        <div class="ph-body">
+          <div class="ph-tag">Phase 4 · unlocks next</div>
+          <div class="ph-name" style="color:var(--ink-faint)">Cloud <span class="pct">0%</span></div>
+          <div class="ph-skills"><span>AWS</span><span>Kubernetes</span><span>CI/CD</span></div>
+          <div class="ph-prog"><i></i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= KNOWLEDGE GRAPH ================= -->
+<section class="kgraph">
+  <div class="wrap kg-grid">
+    <div class="kg-canvas glass reveal">
+      <svg viewBox="0 0 560 420" role="img" aria-label="Knowledge graph showing mastery of Java, Spring, Docker and Kafka">
+        <!-- edges -->
+        <g stroke="url(#edgeGrad)" stroke-width="1.6" fill="none">
+          <path d="M170 150 L300 120"/>
+          <path d="M170 150 L240 270"/>
+          <path d="M300 120 L240 270"/>
+          <path d="M300 120 L430 200"/>
+          <path d="M240 270 L430 200"/>
+          <path d="M240 270 L370 330"/>
+          <path d="M430 200 L370 330"/>
+          <path d="M170 150 L90 260"/>
+          <path d="M90 260 L240 270"/>
+        </g>
+        <!-- satellite nodes -->
+        <g class="kg-node" style="animation-delay:1.2s">
+          <circle cx="90" cy="260" r="20" fill="rgba(52,211,153,.14)" stroke="#34D399" stroke-width="1.4"/>
+          <text x="90" y="264" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" fill="#0E9F6E">SQL</text>
+        </g>
+        <g class="kg-node" style="animation-delay:2.4s">
+          <circle cx="370" cy="330" r="24" fill="rgba(251,191,36,.14)" stroke="#FBBF24" stroke-width="1.4"/>
+          <text x="370" y="334" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" fill="#B45309">gRPC</text>
+        </g>
+        <!-- main nodes -->
+        <g class="kg-node">
+          <circle cx="170" cy="150" r="44" fill="rgba(52,211,153,.16)" stroke="#34D399" stroke-width="2"/>
+          <circle cx="170" cy="150" r="52" fill="none" stroke="#34D399" stroke-width="1" opacity=".25"/>
+          <text x="170" y="148" text-anchor="middle" font-family="Sora, sans-serif" font-weight="700" font-size="15" fill="#15151F">Java</text>
+          <text x="170" y="165" text-anchor="middle" font-family="DM Mono, monospace" font-size="8.5" fill="#0E9F6E">MASTERED</text>
+        </g>
+        <g class="kg-node" style="animation-delay:.8s">
+          <circle cx="300" cy="120" r="40" fill="rgba(52,211,153,.16)" stroke="#34D399" stroke-width="2"/>
+          <text x="300" y="118" text-anchor="middle" font-family="Sora, sans-serif" font-weight="700" font-size="14" fill="#15151F">Spring</text>
+          <text x="300" y="134" text-anchor="middle" font-family="DM Mono, monospace" font-size="8.5" fill="#0E9F6E">MASTERED</text>
+        </g>
+        <g class="kg-node" style="animation-delay:1.7s">
+          <circle cx="240" cy="270" r="42" fill="rgba(251,191,36,.16)" stroke="#FBBF24" stroke-width="2"/>
+          <circle cx="240" cy="270" r="50" fill="none" stroke="#FBBF24" stroke-width="1" opacity=".3"/>
+          <text x="240" y="268" text-anchor="middle" font-family="Sora, sans-serif" font-weight="700" font-size="14" fill="#15151F">Docker</text>
+          <text x="240" y="284" text-anchor="middle" font-family="DM Mono, monospace" font-size="8.5" fill="#B45309">LEARNING</text>
+        </g>
+        <g class="kg-node" style="animation-delay:2.9s">
+          <circle cx="430" cy="200" r="46" fill="rgba(251,113,133,.16)" stroke="#FB7185" stroke-width="2"/>
+          <circle cx="430" cy="200" r="56" fill="none" stroke="#FB7185" stroke-width="1" opacity=".35">
+            <animate attributeName="r" values="50;58;50" dur="3s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values=".4;.1;.4" dur="3s" repeatCount="indefinite"/>
+          </circle>
+          <text x="430" y="198" text-anchor="middle" font-family="Sora, sans-serif" font-weight="700" font-size="14" fill="#15151F">Kafka</text>
+          <text x="430" y="214" text-anchor="middle" font-family="DM Mono, monospace" font-size="8.5" fill="#BE123C">FOCUS</text>
+        </g>
+      </svg>
+    </div>
+    <div class="reveal d1">
+      <span class="eyebrow">Knowledge graph</span>
+      <h2 class="section-title">See what you actually know</h2>
+      <p class="section-sub">Every concept you touch becomes a node. Athena scores each one continuously, so weak spots glow before they become blockers.</p>
+      <div class="legend">
+        <div class="leg glass" style="--halo:rgba(52,211,153,.15)"><span class="leg-dot" style="background:#34D399"></span><div><b>Mastered</b><span>Verified through interviews and projects</span></div><span class="pct">12 nodes</span></div>
+        <div class="leg glass" style="--halo:rgba(251,191,36,.15)"><span class="leg-dot" style="background:#FBBF24"></span><div><b>Learning</b><span>Active in your current phase</span></div><span class="pct">5 nodes</span></div>
+        <div class="leg glass" style="--halo:rgba(251,113,133,.15)"><span class="leg-dot" style="background:#FB7185"></span><div><b>Needs improvement</b><span>Flagged by your latest AI interview</span></div><span class="pct">2 nodes</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= AI INTERVIEW ================= -->
+<section class="interview" id="interviews">
+  <div class="wrap">
+    <div class="reveal" style="text-align:center;max-width:620px;margin:0 auto 56px">
+      <span class="eyebrow" style="justify-content:center">AI interviews</span>
+      <h2 class="section-title">Interviewed weekly. Improved weekly.</h2>
+      <p class="section-sub" style="margin-inline:auto">A conversational AI examiner probes your understanding, scores it, and feeds the result straight back into your roadmap.</p>
+    </div>
+    <div class="int-card glass reveal d1">
+      <div class="ring-wrap">
+        <svg class="big-ring" id="bigRing" viewBox="0 0 188 188"><circle class="track" cx="94" cy="94" r="83"/><circle class="val" cx="94" cy="94" r="83"/></svg>
+        <div class="ring-center"><b>87%</b><span>This week</span></div>
+      </div>
+      <div>
+        <div class="int-head"><h3>Weekly Interview · Microservices</h3><span class="live-pill">Completed today</span></div>
+        <div class="feedback">
+          "Strong grasp of service decomposition and Docker networking. You need more practice with Kafka Consumers — offset management and rebalancing tripped you up twice."
+          <small>— ATHENA · AI FEEDBACK</small>
+        </div>
+        <div class="int-stats">
+          <div class="int-stat"><b>+5 pts</b><span>vs last week</span></div>
+          <div class="int-stat"><b>14 min</b><span>interview length</span></div>
+          <div class="int-stat"><b>3 drills</b><span>added to roadmap</span></div>
+          <div class="int-stat"><b>92%</b><span>communication score</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ADAPTIVE ENGINE ================= -->
+<section class="engine">
+  <div class="wrap">
+    <div class="reveal" style="text-align:center;max-width:600px;margin:0 auto">
+      <span class="eyebrow" style="justify-content:center">Adaptive engine</span>
+      <h2 class="section-title">A roadmap that rewrites itself</h2>
+      <p class="section-sub" style="margin-inline:auto">The loop runs after every session — silently, continuously, in your favor.</p>
+    </div>
+    <div class="engine-flow">
+      <div class="flow-node glass reveal"><span class="flow-ico" style="background:linear-gradient(135deg,#06B6D4,#22D3EE)">⌁</span><div><b>User Progress</b><span>Sessions, quizzes, projects, interview answers</span></div></div>
+      <div class="flow-arrow reveal" aria-hidden="true"><span class="flow-pulse"></span></div>
+      <div class="flow-node glass reveal d1"><span class="flow-ico" style="background:linear-gradient(135deg,#8B5CF6,#A855F7)">◈</span><div><b>AI Analysis</b><span>Mastery scoring, weakness detection, pace modeling</span></div></div>
+      <div class="flow-arrow reveal d1" aria-hidden="true"><span class="flow-pulse" style="animation-delay:1.3s"></span></div>
+      <div class="flow-node glass reveal d2"><span class="flow-ico" style="background:linear-gradient(135deg,#F472B6,#A855F7)">↻</span><div><b>Roadmap Update</b><span>Drills added, phases resequenced, goals kept on track</span></div></div>
+      <div class="loop-note reveal d3">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-2.64-6.36M21 3v6h-6"/></svg>
+        The loop runs after every session
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ACHIEVEMENTS ================= -->
+<section class="achieve">
+  <div class="wrap">
+    <div class="reveal" style="text-align:center;max-width:600px;margin:0 auto">
+      <span class="eyebrow" style="justify-content:center">Achievements</span>
+      <h2 class="section-title">Progress you can hold</h2>
+      <p class="section-sub" style="margin-inline:auto">AI-generated badges minted from real, verified milestones — not participation trophies.</p>
+    </div>
+    <div class="badges">
+      <div class="badge glass reveal" style="--bring:#F472B6;--bshadow:rgba(244,114,182,.25)">
+        <div class="badge-ico" style="background:linear-gradient(135deg,#FDE68A,#F472B6)">🔥</div>
+        <h4>7 Day Streak</h4><p>Showed up every day for a week</p><span class="earned">Earned · Jun 2</span>
+      </div>
+      <div class="badge glass reveal d1" style="--bring:#34D399;--bshadow:rgba(52,211,153,.25)">
+        <div class="badge-ico" style="background:linear-gradient(135deg,#A7F3D0,#22D3EE)">🌱</div>
+        <h4>Spring Apprentice</h4><p>Phase 2 mastered with 90%+ score</p><span class="earned">Earned · May 27</span>
+      </div>
+      <div class="badge glass reveal d2" style="--bring:#8B5CF6;--bshadow:rgba(139,92,246,.25)">
+        <div class="badge-ico" style="background:linear-gradient(135deg,#C4B5FD,#8B5CF6)">🧭</div>
+        <h4>Backend Explorer</h4><p>First microservice deployed</p><span class="earned">Earned · Jun 8</span>
+      </div>
+      <div class="badge glass reveal d3" style="--bring:#22D3EE;--bshadow:rgba(34,211,238,.25)">
+        <div class="badge-ico" style="background:linear-gradient(135deg,#A5F3FC,#A855F7)">💎</div>
+        <h4>Knowledge Seeker</h4><p>25 graph nodes unlocked</p><span class="earned">Earned · Jun 10</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TESTIMONIALS ================= -->
+<section class="testi" id="pricing">
+  <div class="wrap">
+    <div class="reveal" style="text-align:center;max-width:600px;margin:0 auto">
+      <span class="eyebrow" style="justify-content:center">Loved by learners</span>
+      <h2 class="section-title">From goal to job offer</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="t-card glass reveal">
+        <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
+        <p>"I told Athena 'backend engineer in 6 months' and it built a plan I actually stuck to. The weekly AI interviews caught gaps I didn't know I had."</p>
+        <div class="t-who"><span class="t-ava" style="background:linear-gradient(135deg,#8B5CF6,#F472B6)">MK</span><div><b>Maria K.</b><span>Junior Backend Engineer, hired in 5 months</span></div></div>
+      </div>
+      <div class="t-card glass reveal d1">
+        <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
+        <p>"The knowledge graph is brutal in the best way. Seeing Kafka glow red made me finally fix it instead of skipping ahead."</p>
+        <div class="t-who"><span class="t-ava" style="background:linear-gradient(135deg,#06B6D4,#22D3EE)">DA</span><div><b>David A.</b><span>Software Engineer · career switcher</span></div></div>
+      </div>
+      <div class="t-card glass reveal d2">
+        <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
+        <p>"Every other platform gave me a course. Athena gave me a system — it reshuffled my roadmap the moment I started struggling."</p>
+        <div class="t-who"><span class="t-ava" style="background:linear-gradient(135deg,#F472B6,#A855F7)">SL</span><div><b>Sofia L.</b><span>CS student · top 1% streak</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FINAL CTA ================= -->
+<section class="final" id="start">
+  <div class="wrap">
+    <div class="final-card glass reveal">
+      <div class="mesh" aria-hidden="true"><div class="blob b1" style="top:-220px;left:-80px"></div><div class="blob b2" style="top:auto;bottom:-220px;right:-80px"></div></div>
+      <svg class="final-mark" viewBox="0 0 120 120"><use href="#athenaMark"/></svg>
+      <h2>Your Future Starts<br>With <span class="grad-text">One Goal.</span></h2>
+      <p>Tell Athena where you want to be. It will build the path, walk it with you, and adapt until you arrive.</p>
+      <a class="btn btn-primary" style="position:relative;padding:17px 34px;font-size:16px" href="#login">Create My Learning Path <span aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer id="login">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a class="brand" href="#top" aria-label="Athena home">
+          <svg viewBox="0 0 120 120" width="32" height="32"><use href="#athenaMark"/></svg>
+          <span class="wordmark">athen<em>a</em></span>
+        </a>
+        <p>The AI-powered learning operating system. One goal in, a living roadmap out.</p>
+      </div>
+      <div class="foot-col">
+        <h5>Product</h5>
+        <a href="#features">Features</a><a href="#roadmap">Roadmaps</a><a href="#interviews">AI Interviews</a><a href="#">Knowledge Graph</a><a href="#pricing">Pricing</a>
+      </div>
+      <div class="foot-col">
+        <h5>Company</h5>
+        <a href="#">About</a><a href="#">Careers</a><a href="#">Blog</a><a href="#">Press kit</a>
+      </div>
+      <div class="foot-col">
+        <h5>Resources</h5>
+        <a href="#">Help center</a><a href="#">Community</a><a href="#">Changelog</a><a href="#">Status</a>
+      </div>
+    </div>
+    <div class="foot-base">
+      <span>© 2026 Athena Learning, Inc. All rights reserved.</span>
+      <div style="display:flex;gap:20px"><a href="#" style="color:inherit;text-decoration:none">Privacy</a><a href="#" style="color:inherit;text-decoration:none">Terms</a></div>
+      <div class="foot-social">
+        <a href="#" aria-label="X">𝕏</a><a href="#" aria-label="GitHub">⌥</a><a href="#" aria-label="Discord">◈</a>
+      </div>
+    </div>
+  </div>
+</footer>

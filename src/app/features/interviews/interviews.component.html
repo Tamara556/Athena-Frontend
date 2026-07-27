@@ -1,0 +1,223 @@
+<div class="iv-root">
+<div class="noise" aria-hidden="true"></div>
+<div class="page-mesh" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="ivGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8B5CF6"/><stop offset=".5" stop-color="#F472B6"/><stop offset="1" stop-color="#22D3EE"/></linearGradient>
+    <linearGradient id="ivArea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8B5CF6" stop-opacity=".22"/><stop offset="1" stop-color="#8B5CF6" stop-opacity="0"/></linearGradient>
+  </defs>
+</svg>
+
+<app-sidebar>
+  <main class="main">
+    <header class="topbar" [class.scrolled]="scrolled()">
+      <button class="hamburger" type="button" aria-label="Open menu" (click)="openDrawer()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+      <div class="crumb"><span class="root">Athena</span><span class="sep">›</span><b>{{ 'iv.title' | t }}</b></div>
+      <div class="topbar-spacer"></div>
+      <label class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input type="text" [placeholder]="'iv.search' | t" aria-label="Search"><kbd>⌘K</kbd></label>
+      <app-lang-select></app-lang-select><app-theme-toggle></app-theme-toggle><button class="icon-btn" type="button" aria-label="Notifications"><span class="dot"></span><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg></button>
+    </header>
+
+    <div class="iv">
+
+      <!-- HERO -->
+      <section class="iv-hero reveal">
+        <span class="eyebrow">{{ 'iv.hero.eyebrow' | t }}</span>
+        <h1><span class="grad-text">{{ 'iv.title' | t }}</span></h1>
+        <p class="sub">{{ 'iv.hero.sub' | t }}</p>
+        <p class="supp">{{ 'iv.hero.supp' | t }}</p>
+      </section>
+
+      <!-- NEXT INTERVIEW -->
+      @if (nextInterview(); as next) {
+        <section class="next reveal" aria-labelledby="next-title">
+          <div class="next-grid">
+            <div>
+              <div class="next-eye"><span class="soon"><i></i> {{ next.upNextLabel }}</span></div>
+              <h2 id="next-title">{{ next.title }}</h2>
+              <div class="next-meta">
+                <div class="nm"><span class="ni" style="background:linear-gradient(135deg,#8B5CF6,#A855F7)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span><span class="nt"><small>{{ 'iv.next.scheduled' | t }}</small><b>{{ next.scheduledLabel }}</b></span></div>
+                <div class="nm"><span class="ni" style="background:linear-gradient(135deg,#06B6D4,#22D3EE)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span class="nt"><small>{{ 'iv.next.duration' | t }}</small><b>{{ next.durationLabel }}</b></span></div>
+                <div class="nm"><span class="ni" style="background:linear-gradient(135deg,#F472B6,#A855F7)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1 3-1 4-1 6 0 1 1 2 2 2 2 0 2-2 2-2 2 2 3 4 3 7a6 6 0 0 1-12 0c0-4 3-6 4-9 .8 2 2 2.5 2 2-1-2 0-4 0-6z"/></svg></span><span class="nt"><small>{{ 'iv.next.format' | t }}</small><b>{{ next.formatLabel }}</b></span></div>
+              </div>
+              <div class="next-purpose"><span class="pp">◎</span><p>{{ next.purpose }}</p></div>
+              <div class="next-cta">
+                <button class="btn btn-primary" type="button" [disabled]="starting() === 'scheduled'" (click)="startScheduled(next)">{{ starting() === 'scheduled' ? ('iv.starting' | t) : ('iv.next.start' | t) }} <span aria-hidden="true">→</span></button>
+                <button class="btn btn-glass" type="button" (click)="review()">{{ 'iv.next.prepare' | t }}</button>
+              </div>
+            </div>
+            <div class="emblem" aria-hidden="true">
+              <span class="ring-wave rw1"></span><span class="ring-wave rw2"></span><span class="ring-wave rw3"></span>
+              <span class="core"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v4M8 21h8"/></svg></span>
+              <span class="emblem-cap">{{ 'iv.next.adapts' | t }}</span>
+            </div>
+          </div>
+        </section>
+      }
+
+      <!-- EXPERIENCE PREVIEW -->
+      <section class="section reveal">
+        <div class="section-head"><h2>{{ 'iv.exp.title' | t }}</h2><p>{{ 'iv.exp.sub' | t }}</p></div>
+        <div class="flow">
+          <div class="flow-step"><div class="flow-ic" style="background:linear-gradient(135deg,#8B5CF6,#A855F7)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><h4>{{ 'iv.flow.ask.t' | t }}</h4><p>{{ 'iv.flow.ask.d' | t }}</p></div>
+          <div class="flow-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          <div class="flow-step"><div class="flow-ic" style="background:linear-gradient(135deg,#06B6D4,#22D3EE)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v4"/></svg></div><h4>{{ 'iv.flow.answer.t' | t }}</h4><p>{{ 'iv.flow.answer.d' | t }}</p></div>
+          <div class="flow-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          <div class="flow-step"><div class="flow-ic" style="background:linear-gradient(135deg,#A855F7,#F472B6)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h3l2-7 4 14 2-7h5"/></svg></div><h4>{{ 'iv.flow.listen.t' | t }}</h4><p>{{ 'iv.flow.listen.d' | t }}</p></div>
+          <div class="flow-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          <div class="flow-step"><div class="flow-ic" style="background:linear-gradient(135deg,#FBBF24,#FB923C)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg></div><h4>{{ 'iv.flow.spot.t' | t }}</h4><p>{{ 'iv.flow.spot.d' | t }}</p></div>
+          <div class="flow-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          <div class="flow-step"><div class="flow-ic" style="background:linear-gradient(135deg,#34D399,#22D3EE)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 1 3 6.7L3 16M3 21v-5h5"/></svg></div><h4>{{ 'iv.flow.adapt.t' | t }}</h4><p>{{ 'iv.flow.adapt.d' | t }}</p></div>
+        </div>
+      </section>
+
+      <!-- CONFIDENCE + READINESS -->
+      @if (confidence() || readiness()) {
+      <section class="section reveal">
+        <div class="duo">
+          <div class="card conf" [class.in]="loaded()">
+            <div class="conf-top">
+              <div><h3>{{ 'iv.conf.title' | t }}</h3><p>{{ 'iv.conf.sub' | t }}</p></div>
+              <span class="conf-gain"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 7-7M21 8V3h-5"/></svg> +{{ gain() }} {{ 'iv.conf.sinceFirst' | t }}</span>
+            </div>
+            <div class="conf-wrap">
+              @if (confidence()) {
+                <svg class="conf-chart" viewBox="0 0 720 240" role="img" [attr.aria-label]="'iv.conf.aria' | t">
+                  <g stroke="rgba(21,21,31,.06)" stroke-width="1"><line x1="40" y1="40" x2="700" y2="40"/><line x1="40" y1="110" x2="700" y2="110"/><line x1="40" y1="180" x2="700" y2="180"/></g>
+                  <path class="conf-area" [attr.d]="confidenceArea()"/>
+                  <polyline class="conf-line" [attr.points]="confidencePoints()"/>
+                  @for (dot of confidenceDots(); track dot.index) {
+                    <g [class]="'conf-dot cd' + (dot.index + 1)"><circle [attr.cx]="dot.point.x" [attr.cy]="dot.y" [attr.r]="dot.r" [attr.fill]="dot.point.color"/><text [attr.x]="dot.point.x" [attr.y]="dot.textY" text-anchor="middle" font-family="Sora" font-size="14" font-weight="800" fill="#15151F">{{ dot.point.score }}%</text></g>
+                  }
+                  <g fill="var(--ink-faint)" font-family="DM Mono" font-size="11" text-anchor="middle">
+                    @for (dot of confidenceDots(); track dot.index) { <text [attr.x]="dot.point.x" y="224">{{ dot.point.label }}</text> }
+                  </g>
+                </svg>
+              }
+              <div class="chart-skeleton" [class.hide]="loaded()"><span class="sp"></span> {{ 'iv.conf.charting' | t }}</div>
+            </div>
+          </div>
+
+          @if (readiness(); as r) {
+            <div class="card ready" [class.in]="loaded()">
+              <svg class="rmark" viewBox="0 0 120 120" aria-hidden="true"><use href="#athenaMark"/></svg>
+              <div class="rtag">{{ r.tag }}</div>
+              <h3>{{ r.headline }}</h3>
+              <p>@for (seg of r.segments; track $index) {@if (seg.bold) {<b>{{ seg.text }}</b>} @else {{{ seg.text }}}}</p>
+              <div class="gauge">
+                <div class="gauge-bar"><i [style.width.%]="loaded() ? r.gaugePercent : 0"></i></div>
+                <div class="gauge-row"><span>{{ 'iv.conf.readiness' | t }}</span><b>{{ r.gaugeLabel }}</b></div>
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+      }
+
+      <!-- GROWTH CONVERSATIONS (past) -->
+      <section class="section reveal">
+        <div class="section-head"><h2>{{ 'iv.talks.title' | t }}</h2><p>{{ 'iv.talks.sub' | t }}</p></div>
+        <div class="talks">
+          @for (talk of history(); track talk.id) {
+            <article class="talk" [class.open]="isTalkOpen(talk.id)" tabindex="0">
+              <div class="talk-top">
+                <div class="talk-ring"><svg viewBox="0 0 54 54"><circle class="t" cx="27" cy="27" r="24"/><circle class="v" cx="27" cy="27" r="24" [style.stroke-dashoffset]="ringOffset(talk.score)"/></svg><b>{{ talk.score }}%</b></div>
+                <div class="talk-head"><h4>{{ talk.title }}</h4><div class="when"><span class="done-tag">{{ talk.statusLabel }}</span> {{ talk.whenLabel }}</div></div>
+              </div>
+              <div class="talk-expand">
+                <div class="talk-disc">
+                  <h5>{{ 'iv.talks.discovered' | t }}</h5>
+                  @for (d of talk.discoveries; track $index) {
+                    <li><span class="di" [class.good]="d.kind === 'good'" [class.grow]="d.kind === 'grow'">{{ d.kind === 'good' ? '✓' : '↑' }}</span> {{ d.text }}</li>
+                  }
+                  <div class="talk-result"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path [attr.d]="resultPath(talk.resultKind)"/></svg> {{ talk.resultLabel }}</div>
+                </div>
+              </div>
+              <button class="talk-toggle" type="button" (click)="toggleTalk(talk.id)">{{ isTalkOpen(talk.id) ? ('iv.talks.hide' | t) : ('iv.talks.see' | t) }} <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+            </article>
+          }
+        </div>
+        <div class="talk-empty" style="margin-top:16px">
+          <span class="te">✨</span>
+          <div><b>{{ 'iv.talks.emptyTitle' | t }}</b><span>{{ 'iv.talks.emptySub' | t }}</span></div>
+        </div>
+      </section>
+
+      <!-- WHAT ATHENA LEARNED -->
+      @if (observations().length) {
+      <section class="section reveal">
+        <div class="section-head"><h2>{{ 'iv.learned.title' | t }}</h2><p>{{ 'iv.learned.sub' | t }}</p></div>
+        <div class="obs-grid">
+          @for (obs of observations(); track $index) {
+            <div class="obs"><span class="obs-ic" [style.background]="obs.gradient">{{ obs.icon }}</span><div><p>{{ obs.before }}<b>{{ obs.bold }}</b>{{ obs.after }}</p><small>{{ obs.tag }}</small></div></div>
+          }
+        </div>
+      </section>
+      }
+
+      <!-- PREPARATION -->
+      <section class="section reveal">
+        <div class="section-head"><h2>{{ 'iv.prep.title' | t }}</h2><p>{{ 'iv.prep.sub' | t }}</p></div>
+        <div class="prep">
+          @if (reviewTopics().length) {
+          <div class="prep-card">
+            <h3><span class="ph" style="background:linear-gradient(135deg,#8B5CF6,#A855F7)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span> {{ 'iv.prep.topics' | t }}</h3>
+            @for (topic of reviewTopics(); track topic.id) {
+              <div class="topic"><span class="tdot" [style.background]="topic.gradient">{{ topic.icon }}</span><div class="tinfo"><b>{{ topic.title }}</b><span>{{ topic.note }}</span></div><button class="tgo" type="button" (click)="review()">{{ 'iv.prep.review' | t }}</button></div>
+            }
+          </div>
+          }
+          <div class="prep-card">
+            <h3><span class="ph" style="background:linear-gradient(135deg,#34D399,#22D3EE)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span> {{ 'iv.prep.tips' | t }}</h3>
+            @for (tip of tips(); track $index; let i = $index) {
+              <div class="tip-li"><span class="tk">{{ i + 1 }}</span><span>{{ tip.before }}<b>{{ tip.bold }}</b>{{ tip.after }}</span></div>
+            }
+          </div>
+        </div>
+      </section>
+
+      <!-- WHY INTERVIEWS MATTER -->
+      <section class="section reveal">
+        <div class="section-head"><h2>{{ 'iv.why.title' | t }}</h2><p>{{ 'iv.why.sub' | t }}</p></div>
+        <div class="impact">
+          @for (imp of impacts(); track $index) {
+            <div class="imp"><div class="imp-ic" [style.background]="imp.gradient">{{ imp.icon }}</div><h4>{{ imp.title }}</h4><p>{{ imp.text }}</p></div>
+          }
+        </div>
+      </section>
+
+      <!-- MOCK MODE -->
+      <section class="section reveal">
+        <div class="mock">
+          <div class="mock-grid">
+            <div>
+              <div class="mock-eye"><span class="me">🎧</span><span class="eyebrow" style="margin:0">{{ 'iv.mock.noPressure' | t }}</span></div>
+              <h2>{{ 'iv.mock.title' | t }}</h2>
+              <p class="md">{{ 'iv.mock.desc' | t }}</p>
+              <div class="mock-feats">
+                <span>✦ {{ 'iv.mock.feat1' | t }}</span>
+                <span>↺ {{ 'iv.mock.feat2' | t }}</span>
+                <span>🙂 {{ 'iv.mock.feat3' | t }}</span>
+              </div>
+            </div>
+            <div class="mock-panel">
+              <div class="mp-label">{{ 'iv.mock.intensity' | t }}</div>
+              <div class="seg" role="group" aria-label="Difficulty">
+                @for (level of levels(); track level.id) {
+                  <button type="button" [class.on]="mockSel() === level.id" (click)="pickMock(level.id)">{{ level.label }}</button>
+                }
+              </div>
+              <div class="mock-dur"><span class="du"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span>{{ 'iv.mock.estimated' | t }} <b>{{ selectedLevel()?.durationLabel }}</b> · <span>{{ selectedLevel()?.questionsLabel }}</span> {{ 'iv.mock.ofQuestions' | t }}</span></div>
+              @if (selectedLevel(); as level) {
+                <button class="btn btn-primary" type="button" style="width:100%" [disabled]="starting() === 'mock'" (click)="startMock(level)">{{ starting() === 'mock' ? ('iv.starting' | t) : ('iv.mock.start' | t) }} <span aria-hidden="true">→</span></button>
+              }
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</app-sidebar>
+</div>
