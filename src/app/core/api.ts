@@ -47,6 +47,10 @@ export class Api {
     return this.http.get<RoadmapResponse>(`${API_BASE}/ai/roadmaps/me`);
   }
 
+  completePhase(index: number): Observable<RoadmapResponse> {
+    return this.http.post<RoadmapResponse>(`${API_BASE}/ai/roadmaps/me/phases/${index}/complete`, {});
+  }
+
   dailyPlan(): Observable<DailyPlanResponse> {
     return this.http.get<DailyPlanResponse>(`${API_BASE}/ai/daily-plans/me`);
   }

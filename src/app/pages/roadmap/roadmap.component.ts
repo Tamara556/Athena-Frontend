@@ -66,10 +66,32 @@ export class RoadmapComponent implements OnInit, AfterViewInit {
     this.router.navigateByUrl('/learning/current');
   }
 
+  /**
+   * Mark the current phase complete. The backend persists the new phase statuses
+   * (this phase → completed, the next → current, the one after → available) and
+   * returns the updated roadmap, which we re-render while keeping the current page.
+   */
+  completePhase(index: number): void {
+    if (this.completing()) {
+      return;
+    }
+    this.completing.set(true);
+    this.api.completePhase(index).subscribe({
+      next: (r) => {
+        const currentPage = this.page();
+        this.build(r);
+        this.page.set(Math.min(currentPage, this.pageCount() - 1));
+        this.completing.set(false);
+      },
+      error: () => this.completing.set(false),
+    });
+  }
+
   readonly loading = signal(true);
   readonly hasRoadmap = signal(false);
   readonly revealed = signal(false);
   readonly scrolled = signal(false);
+  readonly completing = signal(false);
 
   readonly name = signal(this.session.name() ?? this.t('rm.there'));
   readonly goal = signal(this.t('rm.yourGoal'));
