@@ -125,6 +125,22 @@
                           <ul>@for (o of phase.objectives; track o) { <li><span class="chk off"></span>{{ o }}</li> }</ul>
                         </div>
                       }
+                      <div class="feature-foot">
+                        <a class="btn btn-glass btn-sm" routerLink="/learning/current">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+                          {{ 'rm.continueLearning' | t }}
+                        </a>
+                        <span class="spacer"></span>
+                        <button class="btn btn-primary btn-sm rm-complete" type="button"
+                                [disabled]="completing()" (click)="completePhase(phase.index)">
+                          @if (completing()) {
+                            {{ 'rm.completing' | t }}
+                          } @else {
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            {{ 'rm.markComplete' | t }}
+                          }
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
